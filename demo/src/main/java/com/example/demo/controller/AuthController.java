@@ -4,9 +4,11 @@ import com.example.demo.User;
 import com.example.demo.UserRepository;
 import com.example.demo.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -19,35 +21,56 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Updated to PasswordEncoder
 
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            return "Error: Email already in use";
+    public ResponseEntity<String> register(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        String password = requestBody.get("password");
+        String confirmPassword = requestBody.get("confirmPassword");
+        String gender = requestBody.get("gender");
+        int age;
+
+        try {
+            age = Integer.parseInt(requestBody.get("age"));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Error: Invalid age format.");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        String levelOfStudy = requestBody.get("levelOfStudy");
+        String affiliation = requestBody.get("affiliation");
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            return ResponseEntity.badRequest().body("Error: Email already in use");
+        }
+
+        if (!password.equals(confirmPassword)) {
+            return ResponseEntity.badRequest().body("Error: Passwords do not match");
+        }
+
+        User user = new User(email, gender, age, levelOfStudy, affiliation, passwordEncoder.encode(password));
         userRepository.save(user);
-        return "User registered successfully!";
+
+        return ResponseEntity.ok("User registered successfully!");
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-        if (existingUser.isPresent() && passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
-            return jwtUtil.generateToken(user.getEmail());
+    public ResponseEntity<String> login(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        String password = requestBody.get("password");
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Error: Invalid email or password");
         }
-        return "Error: Invalid email or password";
-    }
 
-    @GetMapping("/test")
-    public String testEndpoint() {
-        return "Hello from Backend!";
-    }
+        User user = userOptional.get();
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            return ResponseEntity.badRequest().body("Error: Invalid email or password");
+        }
 
-    @GetMapping("/protected")
-    public String protectedEndpoint() {
-        return "Welcome to the protected route!";
+        String token = jwtUtil.generateToken(user);
+        return ResponseEntity.ok(token);
     }
-
 }

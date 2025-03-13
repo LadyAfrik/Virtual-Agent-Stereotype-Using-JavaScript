@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.User; // Ensure correct import
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,16 +20,23 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
-    public String generateToken(String email) {
+    public String generateToken(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(user.getEmail())
+                .claim("gender", user.getGender())
+                .claim("age", user.getAge())
+                .claim("levelOfStudy", user.getLevelOfStudy())
+                .claim("affiliation", user.getAffiliation())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // ✅ Alias method for extractUsername()
     public String extractUsername(String token) {
         return extractEmail(token);
     }
