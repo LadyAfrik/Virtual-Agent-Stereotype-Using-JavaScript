@@ -1,0 +1,271 @@
+/* General Styles */
+.app-container {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #333;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Adjust spacing */
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.navbar .menu {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-link {
+  color: #61dafb;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Active Page Highlight */
+.active-link {
+  color: #ffcc00 !important;
+  text-decoration: underline;
+}
+
+/* Hamburger Menu for Mobile */
+.hamburger {
+  display: none;
+  font-size: 1.5rem;
+  color: #61dafb;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .navbar .menu {
+    display: none;
+    flex-direction: column;
+    background-color: #333;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .navbar .menu.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+
+/* Landing Page Styles */
+.landing-container {
+  color: white;
+  padding: 50px 20px;
+  text-align: center;
+  height: 150vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Ensure the blur applies only to the background */
+}
+
+.landing-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../public/Background.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(4px); /* Apply the blur effect */
+  z-index: -1; /* Place the blur behind the content */
+}
+
+.landing-container h1 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: bold; /* Makes the text bolder */
+  letter-spacing: 2px; /* Adds space between the letters */
+  color: white; /* Keeps the text color white */
+  text-transform: uppercase; /* Makes text uppercase */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Adds a more pronounced shadow */
+}
+
+.landing-container p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.intro-text {
+  font-size: 1.5rem;
+  font-weight: bold; /* Make the text bolder */
+  letter-spacing: 1px; /* Adds space between the letters */
+  color: #61dafb; /* Keeps the text blue */
+  text-align: center; /* Centers the text */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Adds shadow to make the text stand out */
+  -webkit-text-stroke: 0.5px white; /* Adds a white border around the text */
+  animation: blink-animation 1.5s steps(5, start) infinite; /* Blinking effect */
+}
+
+/* Blinking animation */
+@keyframes blink-animation {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Stop blinking when mouse is over the text */
+.intro-text:hover {
+  animation: none; /* Stops the blinking effect */
+  opacity: 1; /* Ensures the text is fully visible */
+}
+
+.agent-intro h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.agent-button {
+  background-color: #61dafb;
+  color: #333;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.agent-button:hover {
+  background-color: #4e73df;
+}
+
+/* Course Info and Call to Action */
+.course-info {
+  margin-top: 40px;
+}
+
+.cta-button {
+  background-color: #61dafb;
+  color: #333;
+  width: 50%; /* Adjust width */
+  height: auto; /* Allow the height to grow based on content */
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block; /* Makes the div a block element */
+  margin-top: 10px; /* Adds some spacing above */
+  padding: 20px; /* Adds padding for vertical space inside the button */
+  text-align: justify; /* Align text to the left */
+  box-sizing: border-box; /* Ensures padding is included in the total width and height */
+  margin-left: auto; /* Automatically adjust the left margin */
+  margin-right: auto; /* Automatically adjust the right margin */
+}
+
+.cta-button ol {
+  padding-left: 20px; /* Adds some space for bullet points */
+}
+
+.cta-button li {
+  margin-bottom: 10px; /* Adds spacing between bullet points */
+}
+
+/* Ensure Login and Register inside CTA are black */
+.cta-button .nav-link {
+  color: black; /* Ensure Register and Login inside CTA button remain black */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.cta-button .nav-link:hover {
+  color: #61dafb; /* Change color to blue on hover */
+}
+
+/* Hover effect for CTA button */
+.cta-button:hover {
+  background-color: #4e73df; /* Change background color on hover */
+}
+
+/* Add pointer arrow icon before each list item */
+.pointer-icon {
+  width: 20px; /* Adjust size */
+  height: 20px; /* Adjust size */
+  vertical-align: middle; /* Aligns the image with the text */
+  margin-right: 10px; /* Adds space between the image and the text */
+  display: inline-block; /* Ensures the image is displayed on the same line as text */
+  animation: blink-animation 1.5s infinite; /* Apply blinking effect */
+}
+
+/* Define the blinking animation */
+@keyframes blink-animation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* Scrolling Text Container */
+.scrolling-text {
+  width: 100%; /* Full width of the container */
+  overflow: hidden; /* Hide text when it overflows */
+  position: relative; /* Ensure the text can move inside this container */
+  padding: 10px 0; /* Padding to add some space around */
+  margin-top: 10px; /* Space above the scrolling text */
+  text-align: center; /* Align the text in the center */
+  height: 40px; /* Adjust the height to fit the text properly */
+}
+
+/* Scrolling Text Content */
+.scrolling-text p {
+  position: absolute;
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
+  animation: scroll-left 15s linear infinite; /* Slow speed for scrolling */
+  font-size: 1.2rem;
+  color: #f0f0f0; /* Light color for the text */
+  margin: 0;
+  padding-left: 100%; /* Start from the far right */
+  font-weight: bold;
+  line-height: 40px; /* Ensure the text stays vertically centered */
+}
+
+/* Scrolling animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%); /* Start from the right side of the screen */
+  }
+  100% {
+    transform: translateX(-100%); /* End at the left side, off-screen */
+  }
+}
+
+/* Hover effect to stop animation and change text size */
+.scrolling-text:hover p {
+  animation-play-state: paused; /* Pause scrolling on hover */
+  font-size: 1.5rem; /* Increase font size when hovered */
+  transition: font-size 0.3s ease; /* Smooth transition for font size change */
+}
+
