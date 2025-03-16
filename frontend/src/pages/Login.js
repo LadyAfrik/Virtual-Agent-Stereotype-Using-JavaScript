@@ -14,12 +14,14 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const token = await response.text();
 
       if (response.ok) {
-        localStorage.setItem("token", token); // Store token in localStorage
+        localStorage.setItem("token", token); // Store token
+        localStorage.setItem("userEmail", email); // Store email ✅
         alert("Login Successful!");
-        navigate("/dashboard"); // Redirect to dashboard
+        navigate("/dashboard");
       } else {
         alert("Login Failed: " + token);
       }

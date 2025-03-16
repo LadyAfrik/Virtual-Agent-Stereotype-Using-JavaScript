@@ -269,3 +269,28 @@
   transition: font-size 0.3s ease; /* Smooth transition for font size change */
 }
 
+
+/* Red Blinking Alert */
+.alert {
+  background-color: red;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  animation: blink 3s step-start 0s infinite;
+}
+
+/* Blinking animation */
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Pause blinking when mouse is over */
+.alert:hover {
+  animation-play-state: paused;
+}
+

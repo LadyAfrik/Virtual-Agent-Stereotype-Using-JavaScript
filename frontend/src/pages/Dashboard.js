@@ -1,46 +1,74 @@
-import React, { useState } from "react";
-
-const videoSources = [
-  "/videos/Male_Agent.mp4",
-  "/videos/Female_Agent.mp4",
-  "/videos/Androgynous_Agent.mp4",
-];
+import React, { useState, useEffect } from "react";
+import DashboardContent from "./DashboardContent"; // ✅ The old Dashboard Page
+import VideoPage from "./VideoPage"; // ✅ The Video Display Page
 
 const Dashboard = () => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [videosWatched, setVideosWatched] = useState(0);
+  const [activePage, setActivePage] = useState("dashboard");
+  const userEmail = localStorage.getItem("userEmail"); // ✅ Retrieve stored email
 
-  const handleVideoEnd = () => {
-    if (currentVideoIndex < videoSources.length - 1) {
-      setCurrentVideoIndex(currentVideoIndex + 1);
-    } else {
-      setVideosWatched(3);
+  // Redirect to login if not logged in
+  useEffect(() => {
+    if (!userEmail) {
+      window.location.href = "http://localhost:3000/login"; // Redirect to login page if not logged in
+    }
+  }, [userEmail]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userEmail"); // Clear user session
+    window.location.href = "http://localhost:3000"; // Redirect to Home page
+  };
+
+  const renderPage = () => {
+    switch (activePage) {
+      case "dashboard":
+        return <DashboardContent />;
+      case "videos":
+        return <VideoPage />;
+      default:
+        return <h2 className="text-center">Page Not Found</h2>;
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white px-4">
-      <h1 className="text-2xl font-bold text-center">Welcome to Your Dashboard</h1>
-      <p className="mt-2 text-center">Watch the videos to proceed.</p>
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Top Blue Bar (Kept as requested) */}
+      <div className="w-full bg-blue-900 text-white p-4 text-center"></div>
 
-      {/* Video Container with Controlled Height */}
-      <div className="mt-5 w-full max-w-2xl">
-        <video
-          key={currentVideoIndex}
-          src={videoSources[currentVideoIndex]}
-          controls
-          autoPlay
-          onEnded={handleVideoEnd}
-          className="w-full h-[400px] object-contain rounded-lg shadow-lg"
-        ></video>
+      {/* Sidebar + Main Content Wrapper */}
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <div className="w-1/4 bg-blue-900 text-white p-5">
+          <h1 className="text-2xl font-bold mb-4">Main Dashboard</h1>
+          {userEmail && <p className="text-sm mb-6">Logged in as: {userEmail}</p>}
+          <ul>
+            <li
+              className={`p-3 cursor-pointer rounded ${
+                activePage === "dashboard" ? "bg-blue-700" : "hover:bg-blue-800"
+              }`}
+              onClick={() => setActivePage("dashboard")}
+            >
+              🏠 Home
+            </li>
+            <li
+              className={`p-3 cursor-pointer rounded ${
+                activePage === "videos" ? "bg-blue-700" : "hover:bg-blue-800"
+              }`}
+              onClick={() => setActivePage("videos")}
+            >
+              🎥 Watch Videos
+            </li>
+            <li
+              className="p-3 cursor-pointer rounded hover:bg-blue-800"
+              onClick={handleLogout} // Call handleLogout on click
+            >
+              🚪 Logout
+            </li>
+          </ul>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 p-10 bg-white shadow-lg">{renderPage()}</div>
       </div>
-
-      {/* Show Proceed Button After All Videos */}
-      {videosWatched === 3 && (
-        <button className="mt-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600">
-          Proceed to Ranking
-        </button>
-      )}
     </div>
   );
 };

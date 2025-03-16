@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } f
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import DashboardContent from "./pages/DashboardContent";
+import VideoPage from "./pages/VideoPage";
 import AuthService from "./AuthService";
 import './App.css'; // Import your CSS here
 
@@ -13,26 +15,32 @@ const ProtectedRoute = ({ children }) => {
 function Navbar() {
   const location = useLocation(); // Get the current route path
 
+  // Only show navbar on these routes
+  const showNavbar = location.pathname !== "/dashboard" && location.pathname !== "/dashboardcontent" && location.pathname !== "/videopage";
+
+  if (!showNavbar) return null; // Don't render navbar on the above routes
+
   return (
     <nav className="navbar">
       <Link to="/" className={`nav-link ${location.pathname === "/" ? "active-link" : ""}`}>Home</Link>
       <Link to="/login" className={`nav-link ${location.pathname === "/login" ? "active-link" : ""}`}>Login</Link>
       <Link to="/register" className={`nav-link ${location.pathname === "/register" ? "active-link" : ""}`}>Register</Link>
-      <Link to="/dashboard" className={`nav-link ${location.pathname === "/dashboard" ? "active-link" : ""}`}>Dashboard</Link>
     </nav>
   );
 }
 
 function App() {
   return (
-    <Router>
+    <Router> {/* Ensure this Router component wraps your entire app */}
       <div className="app-container">
-        <Navbar />
+        <Navbar /> {/* Navbar is now inside Router */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboardcontent" element={<DashboardContent />} />
+          <Route path="/videopage" element={<VideoPage />} />
         </Routes>
       </div>
     </Router>
