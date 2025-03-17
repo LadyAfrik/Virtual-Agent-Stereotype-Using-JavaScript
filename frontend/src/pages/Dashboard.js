@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import DashboardContent from "./DashboardContent"; // ✅ The old Dashboard Page
-import VideoPage from "./VideoPage"; // ✅ The Video Display Page
+import DashboardContent from "./DashboardContent";
+import VideoPage from "./VideoPage";
+import RankingPage from "./RankingPage"; // ✅ Import Ranking Page
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState("dashboard");
@@ -24,6 +25,8 @@ const Dashboard = () => {
         return <DashboardContent />;
       case "videos":
         return <VideoPage />;
+      case "ranking":
+        return <RankingPage />; // ✅ Include Ranking Page
       default:
         return <h2 className="text-center">Page Not Found</h2>;
     }
@@ -56,6 +59,14 @@ const Dashboard = () => {
               onClick={() => setActivePage("videos")}
             >
               🎥 Watch Videos
+            </li>
+            <li
+              className={`p-3 cursor-pointer rounded ${
+                activePage === "ranking" ? "bg-blue-700" : "hover:bg-blue-800"
+              }`}
+              onClick={() => setActivePage("ranking")}
+            >
+              📊 Rank Agents
             </li>
             <li
               className="p-3 cursor-pointer rounded hover:bg-blue-800"

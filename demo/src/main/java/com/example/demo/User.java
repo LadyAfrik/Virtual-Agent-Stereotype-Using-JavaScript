@@ -19,15 +19,23 @@ public class User {
     private String affiliation;
     private String password;
 
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    private int watchedTheVideos;  // 0 or 1
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    private int takenTheSurvey;  // 0 or 1
+
     public User() {}
 
-    public User(String email, String gender, int age, String levelOfStudy, String affiliation, String password) {
+    public User(String email, String gender, int age, String levelOfStudy, String affiliation, String password, int watchedTheVideos, int takenTheSurvey) {
         this.email = email;
         this.gender = gender;
         this.age = age;
         this.levelOfStudy = levelOfStudy;
         this.affiliation = affiliation;
         this.password = password;
+        this.watchedTheVideos = watchedTheVideos;
+        this.takenTheSurvey = takenTheSurvey;
     }
 
     // Getters & Setters
@@ -51,4 +59,10 @@ public class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public int getWatchedTheVideos() { return watchedTheVideos; }
+    public void setWatchedTheVideos(int watchedTheVideos) { this.watchedTheVideos = watchedTheVideos; }
+
+    public int getTakenTheSurvey() { return takenTheSurvey; }
+    public void setTakenTheSurvey(int takenTheSurvey) { this.takenTheSurvey = takenTheSurvey; }
 }

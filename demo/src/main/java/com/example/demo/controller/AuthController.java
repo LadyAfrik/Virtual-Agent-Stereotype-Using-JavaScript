@@ -49,7 +49,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Passwords do not match");
         }
 
-        User user = new User(email, gender, age, levelOfStudy, affiliation, passwordEncoder.encode(password));
+        User user = new User(email, gender, age, levelOfStudy, affiliation, passwordEncoder.encode(password), 0, 0);
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered successfully!");
@@ -73,4 +73,18 @@ public class AuthController {
         String token = jwtUtil.generateToken(user);
         return ResponseEntity.ok(token);
     }
+
+    @PostMapping("/get-affiliation")
+    public ResponseEntity<?> getAffiliation(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("success", false, "message", "User not found"));
+        }
+
+        User user = optionalUser.get();
+        return ResponseEntity.ok(Map.of("success", true, "affiliation", user.getAffiliation()));
+    }
+
 }
