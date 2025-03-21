@@ -49,30 +49,34 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Passwords do not match");
         }
 
-        User user = new User(email, gender, age, levelOfStudy, affiliation, passwordEncoder.encode(password), 0, 0);
+        User user = new User(email, gender, age, levelOfStudy, affiliation, passwordEncoder.encode(password), 0, 0, 0);
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered successfully!");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
 
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Invalid email or password");
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid email or password"));
         }
 
         User user = userOptional.get();
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            return ResponseEntity.badRequest().body("Error: Invalid email or password");
+            return ResponseEntity.badRequest().body(Map.of("error", "Invalid email or password"));
         }
 
+        // ✅ Generate JWT Token
         String token = jwtUtil.generateToken(user);
-        return ResponseEntity.ok(token);
+
+        // ✅ Return JSON response instead of plain text
+        return ResponseEntity.ok(Map.of("token", token));
     }
+
 
     @PostMapping("/get-affiliation")
     public ResponseEntity<?> getAffiliation(@RequestBody Map<String, String> request) {

@@ -25,9 +25,12 @@ public class User {
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private int takenTheSurvey;  // 0 or 1
 
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
+    private int lastWatchedVideo; // Stores index of the last watched video
+
     public User() {}
 
-    public User(String email, String gender, int age, String levelOfStudy, String affiliation, String password, int watchedTheVideos, int takenTheSurvey) {
+    public User(String email, String gender, int age, String levelOfStudy, String affiliation, String password, int watchedTheVideos, int takenTheSurvey, int lastWatchedVideo) {
         this.email = email;
         this.gender = gender;
         this.age = age;
@@ -36,6 +39,7 @@ public class User {
         this.password = password;
         this.watchedTheVideos = watchedTheVideos;
         this.takenTheSurvey = takenTheSurvey;
+        this.lastWatchedVideo = lastWatchedVideo;
     }
 
     // Getters & Setters
@@ -65,4 +69,7 @@ public class User {
 
     public int getTakenTheSurvey() { return takenTheSurvey; }
     public void setTakenTheSurvey(int takenTheSurvey) { this.takenTheSurvey = takenTheSurvey; }
+
+    public int getLastWatchedVideo() { return lastWatchedVideo; }
+    public void setLastWatchedVideo(int lastWatchedVideo) { this.lastWatchedVideo = lastWatchedVideo; }
 }

@@ -4,10 +4,13 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);  // ✅ Added loading state
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true); // ✅ Show loading state
+
     try {
       const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
@@ -15,18 +18,25 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const token = await response.text();
+      const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", token); // Store token
-        localStorage.setItem("userEmail", email); // Store email ✅
+        localStorage.setItem("authToken", data.token);  // ✅ Fixed token storage
+        localStorage.setItem("userEmail", email);
+
+        console.log("Login Success! Token:", data.token);
+        console.log("User Email:", email);
+
         alert("Login Successful!");
         navigate("/dashboard");
       } else {
-        alert("Login Failed: " + token);
+        alert("Login Failed: " + (data.error || "Invalid email or password"));
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false); // ✅ Hide loading state
     }
   };
 
@@ -51,8 +61,13 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
-            Login
+          <button
+            className={`w-full p-2 rounded-md ${
+              loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+            } text-white`}
+            disabled={loading}  // ✅ Disable button while logging in
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
