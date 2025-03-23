@@ -1,22 +1,47 @@
 import React, { useState, useEffect } from "react";
 import DashboardContent from "./DashboardContent";
 import VideoPage from "./VideoPage";
-import RankingPage from "./RankingPage"; // ✅ Import Ranking Page
+import RankingGender from "./RankingGender";
+import RankingPage from "./RankingPage";
 
 const Dashboard = () => {
   const [activePage, setActivePage] = useState("dashboard");
-  const userEmail = localStorage.getItem("userEmail"); // ✅ Retrieve stored email
+  const [genderIdentificationUnlocked, setGenderIdentificationUnlocked] = useState(
+    localStorage.getItem("genderIdentificationUnlocked") === "true"
+  );
+  const [rankingUnlocked, setRankingUnlocked] = useState(
+    localStorage.getItem("rankingUnlocked") === "true"
+  );
+  const userEmail = localStorage.getItem("userEmail");
 
-  // Redirect to login if not logged in
   useEffect(() => {
     if (!userEmail) {
-      window.location.href = "http://localhost:3000/login"; // Redirect to login page if not logged in
+      window.location.href = "http://localhost:3000/login";
     }
   }, [userEmail]);
 
+  useEffect(() => {
+    setGenderIdentificationUnlocked(localStorage.getItem("genderIdentificationUnlocked") === "true");
+    setRankingUnlocked(localStorage.getItem("rankingUnlocked") === "true");
+  }, []);
+
   const handleLogout = () => {
-    localStorage.removeItem("userEmail"); // Clear user session
-    window.location.href = "http://localhost:3000"; // Redirect to Home page
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("genderIdentificationUnlocked");
+    localStorage.removeItem("rankingUnlocked");
+    window.location.href = "http://localhost:3000";
+  };
+
+  const unlockGenderIdentification = () => {
+    localStorage.setItem("genderIdentificationUnlocked", "true");
+    setGenderIdentificationUnlocked(true);
+  };
+
+  const unlockRanking = () => {
+    localStorage.setItem("rankingUnlocked", "true");
+    setRankingUnlocked(true);
+    localStorage.removeItem("genderIdentificationUnlocked"); // Ensure gender page is locked after ranking is unlocked
+    setGenderIdentificationUnlocked(false); // Update state
   };
 
   const renderPage = () => {
@@ -24,60 +49,47 @@ const Dashboard = () => {
       case "dashboard":
         return <DashboardContent />;
       case "videos":
-        return <VideoPage />;
+        return <VideoPage unlockGenderIdentification={unlockGenderIdentification} />;
       case "ranking":
-        return <RankingPage />; // ✅ Include Ranking Page
+        return genderIdentificationUnlocked ? <RankingGender unlockRanking={unlockRanking} /> : <h2>Access Denied</h2>;
+      case "rankingPage":
+        return rankingUnlocked ? <RankingPage /> : <h2>Access Denied</h2>;
       default:
-        return <h2 className="text-center">Page Not Found</h2>;
+        return <h2>Page Not Found</h2>;
     }
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      {/* Top Blue Bar (Kept as requested) */}
       <div className="w-full bg-blue-900 text-white p-4 text-center"></div>
 
-      {/* Sidebar + Main Content Wrapper */}
       <div className="flex flex-1">
-        {/* Sidebar */}
         <div className="w-1/4 bg-blue-900 text-white p-5">
           <h1 className="text-2xl font-bold mb-4">Main Dashboard</h1>
           {userEmail && <p className="text-sm mb-6">Logged in as: {userEmail}</p>}
           <ul>
-            <li
-              className={`p-3 cursor-pointer rounded ${
-                activePage === "dashboard" ? "bg-blue-700" : "hover:bg-blue-800"
-              }`}
-              onClick={() => setActivePage("dashboard")}
-            >
+            <li className="p-3 cursor-pointer rounded hover:bg-blue-800" onClick={() => setActivePage("dashboard")}>
               🏠 Home
             </li>
-            <li
-              className={`p-3 cursor-pointer rounded ${
-                activePage === "videos" ? "bg-blue-700" : "hover:bg-blue-800"
-              }`}
-              onClick={() => setActivePage("videos")}
-            >
+            <li className="p-3 cursor-pointer rounded hover:bg-blue-800" onClick={() => setActivePage("videos")}>
               🎥 Watch Videos
             </li>
             <li
-              className={`p-3 cursor-pointer rounded ${
-                activePage === "ranking" ? "bg-blue-700" : "hover:bg-blue-800"
-              }`}
-              onClick={() => setActivePage("ranking")}
+              className={`p-3 ${genderIdentificationUnlocked ? "cursor-pointer hover:bg-blue-800" : "opacity-50 cursor-not-allowed"}`}
+              onClick={() => genderIdentificationUnlocked && setActivePage("ranking")}
             >
-              📊 Rank Agents
+              📊 Gender Identification
             </li>
             <li
-              className="p-3 cursor-pointer rounded hover:bg-blue-800"
-              onClick={handleLogout} // Call handleLogout on click
+              className={`p-3 ${rankingUnlocked ? "cursor-pointer hover:bg-blue-800" : "opacity-50 cursor-not-allowed"}`}
+              onClick={() => rankingUnlocked && setActivePage("rankingPage")}
             >
-              🚪 Logout
+              🏆 Ranking Page
             </li>
+            <li className="p-3 cursor-pointer rounded hover:bg-blue-800" onClick={handleLogout}>🚪 Logout</li>
           </ul>
         </div>
 
-        {/* Main Content */}
         <div className="flex-1 p-10 bg-white shadow-lg">{renderPage()}</div>
       </div>
     </div>
