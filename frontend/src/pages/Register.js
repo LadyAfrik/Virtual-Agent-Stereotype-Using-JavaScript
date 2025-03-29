@@ -8,7 +8,7 @@ const Register = () => {
     confirmPassword: "",
     gender: "",
     age: "",
-    levelOfStudy: "",  // No "Others" option anymore
+    levelOfStudy: "",
     affiliation: "",
   });
   const [loading, setLoading] = useState(false);
@@ -24,9 +24,6 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
-    console.log("Password:", formData.password);
-    console.log("Confirm Password:", formData.confirmPassword);
 
     if (formData.password.length < 6) {
       setError("Password must be at least 6 characters.");
@@ -49,14 +46,12 @@ const Register = () => {
     const payload = {
       email: formData.email,
       password: formData.password,
-      confirmPassword: formData.confirmPassword, // ✅ Ensure backend gets this
+      confirmPassword: formData.confirmPassword,
       gender: formData.gender,
       age: parseInt(formData.age),
-      levelOfStudy: formData.levelOfStudy, // No "Others" option anymore
+      levelOfStudy: formData.levelOfStudy,
       affiliation: formData.affiliation,
     };
-
-    console.log("Sending payload:", payload); // ✅ Debugging API request
 
     try {
       const response = await fetch("http://localhost:8080/auth/register", {
@@ -65,26 +60,20 @@ const Register = () => {
         body: JSON.stringify(payload),
       });
 
-      const text = await response.text(); // Read response as text first
-
-      console.log("Response text:", text); // Log it to inspect the response
-
+      const text = await response.text();
       let data;
 
-      // Try to parse as JSON if possible
       try {
         data = JSON.parse(text);
-        console.log("Server Response:", data); // ✅ Debugging API response
       } catch (parseError) {
-        console.error("Error parsing response as JSON:", parseError);
-        data = { message: text }; // Treat as plain text if not valid JSON
+        data = { message: text };
       }
 
       if (response.ok) {
         alert("Registration Successful! You can now log in.");
         navigate("/login");
       } else {
-        setError("Registration Failed: " + (data.message || text)); // Display error message
+        setError("Registration Failed: " + (data.message || text));
       }
     } catch (error) {
       console.error("Error registering:", error);
@@ -94,9 +83,8 @@ const Register = () => {
     }
   };
 
-
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 py-12"> {/* Added padding */}
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
@@ -178,6 +166,27 @@ const Register = () => {
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
+        {/* Links for navigation */}
+        <div className="mt-4 text-center">
+          <p className="text-sm">
+            Already have an account?{" "}
+            <span
+              className="text-blue-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/login")}
+            >
+              Click here to log in
+            </span>
+          </p>
+          <p className="text-sm">
+            Want to explore more?{" "}
+            <span
+              className="text-blue-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/")}
+            >
+              Go to the home page
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

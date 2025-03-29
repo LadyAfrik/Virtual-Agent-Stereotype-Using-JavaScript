@@ -40,8 +40,8 @@ const Dashboard = () => {
   const unlockRanking = () => {
     localStorage.setItem("rankingUnlocked", "true");
     setRankingUnlocked(true);
-    localStorage.removeItem("genderIdentificationUnlocked"); // Ensure gender page is locked after ranking is unlocked
-    setGenderIdentificationUnlocked(false); // Update state
+    localStorage.removeItem("genderIdentificationUnlocked");
+    setGenderIdentificationUnlocked(false);
   };
 
   const renderPage = () => {
@@ -51,7 +51,7 @@ const Dashboard = () => {
       case "videos":
         return <VideoPage unlockGenderIdentification={unlockGenderIdentification} />;
       case "ranking":
-        return genderIdentificationUnlocked ? <RankingGender unlockRanking={unlockRanking} /> : <h2>Access Denied</h2>;
+        return genderIdentificationUnlocked ? <RankingGender unlockRanking={unlockRanking} /> : <h2>Please Proceed To Ranking Page</h2>;
       case "rankingPage":
         return rankingUnlocked ? <RankingPage /> : <h2>Access Denied</h2>;
       default:
@@ -60,37 +60,43 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      <div className="w-full bg-blue-900 text-white p-4 text-center"></div>
+    <div className="flex flex-col h-screen bg-gradient-to-b from-blue-100 to-blue-200">
+      {/* Header */}
+      <div className="w-full bg-blue-800 text-white p-4 text-center shadow-md">
+      </div>
 
       <div className="flex flex-1">
-        <div className="w-1/4 bg-blue-900 text-white p-5">
-          <h1 className="text-2xl font-bold mb-4">Main Dashboard</h1>
+        {/* Sidebar */}
+        <div className="w-1/4 bg-blue-800 text-white p-5 shadow-lg">
+          <h1 className="text-2xl font-bold mb-4">Main Menu</h1>
           {userEmail && <p className="text-sm mb-6">Logged in as: {userEmail}</p>}
           <ul>
-            <li className="p-3 cursor-pointer rounded hover:bg-blue-800" onClick={() => setActivePage("dashboard")}>
+            <li className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105" onClick={() => setActivePage("dashboard")}>
               🏠 Home
             </li>
-            <li className="p-3 cursor-pointer rounded hover:bg-blue-800" onClick={() => setActivePage("videos")}>
+            <li className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105" onClick={() => setActivePage("videos")}>
               🎥 Watch Videos
             </li>
             <li
-              className={`p-3 ${genderIdentificationUnlocked ? "cursor-pointer hover:bg-blue-800" : "opacity-50 cursor-not-allowed"}`}
+              className={`p-3 ${genderIdentificationUnlocked ? "cursor-pointer hover:bg-blue-600 transition-transform transform hover:scale-105" : "opacity-50 cursor-not-allowed"}`}
               onClick={() => genderIdentificationUnlocked && setActivePage("ranking")}
             >
               📊 Gender Identification
             </li>
             <li
-              className={`p-3 ${rankingUnlocked ? "cursor-pointer hover:bg-blue-800" : "opacity-50 cursor-not-allowed"}`}
+              className={`p-3 ${rankingUnlocked ? "cursor-pointer hover:bg-blue-600 transition-transform transform hover:scale-105" : "opacity-50 cursor-not-allowed"}`}
               onClick={() => rankingUnlocked && setActivePage("rankingPage")}
             >
               🏆 Ranking Page
             </li>
-            <li className="p-3 cursor-pointer rounded hover:bg-blue-800" onClick={handleLogout}>🚪 Logout</li>
+            <li className="p-3 cursor-pointer rounded hover:bg-red-600 transition-transform transform hover:scale-105" onClick={handleLogout}>🚪 Logout</li>
           </ul>
         </div>
 
-        <div className="flex-1 p-10 bg-white shadow-lg">{renderPage()}</div>
+        {/* Main Content */}
+        <div className="flex-1 p-10 bg-white shadow-lg rounded-lg">
+          {renderPage()}
+        </div>
       </div>
     </div>
   );

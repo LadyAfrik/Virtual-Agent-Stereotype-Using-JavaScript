@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);  // ✅ Added loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // ✅ Show loading state
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:8080/auth/login", {
@@ -21,11 +21,8 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("authToken", data.token);  // ✅ Fixed token storage
+        localStorage.setItem("authToken", data.token);
         localStorage.setItem("userEmail", email);
-
-        console.log("Login Success! Token:", data.token);
-        console.log("User Email:", email);
 
         alert("Login Successful!");
         navigate("/dashboard");
@@ -36,12 +33,12 @@ const Login = () => {
       console.error("Error logging in:", error);
       alert("An error occurred. Please try again.");
     } finally {
-      setLoading(false); // ✅ Hide loading state
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="bg-animated-gradient flex justify-center items-center min-h-screen">
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
         <form onSubmit={handleLogin}>
@@ -65,11 +62,32 @@ const Login = () => {
             className={`w-full p-2 rounded-md ${
               loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
             } text-white`}
-            disabled={loading}  // ✅ Disable button while logging in
+            disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+        {/* Links for navigation */}
+        <div className="mt-4 text-center">
+          <p className="text-sm">
+            Don't have an account yet?{" "}
+            <span
+              className="text-blue-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/register")}
+            >
+              Click here to register
+            </span>
+          </p>
+          <p className="text-sm">
+            Return to{" "}
+            <span
+              className="text-blue-500 cursor-pointer hover:underline"
+              onClick={() => navigate("/")}
+            >
+              the Home page
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );
