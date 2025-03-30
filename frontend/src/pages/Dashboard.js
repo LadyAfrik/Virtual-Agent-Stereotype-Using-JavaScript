@@ -48,6 +48,15 @@ const Dashboard = () => {
     switch (activePage) {
       case "dashboard":
         return <DashboardContent />;
+      case "reports":
+              // Embed external reports page in an iframe
+              return (
+                <iframe
+                  src="http://127.0.0.1:8000/dashboard/dashboard/"
+                  style={{ width: "100%", height: "100%", border: "none" }}
+                  title="Reports"
+                ></iframe>
+              );
       case "videos":
         return <VideoPage unlockGenderIdentification={unlockGenderIdentification} />;
       case "ranking":
@@ -74,6 +83,13 @@ const Dashboard = () => {
             <li className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105" onClick={() => setActivePage("dashboard")}>
               🏠 Home
             </li>
+            <li
+                          className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105"
+                          onClick={() => setActivePage("reports")}
+                        >
+                          📊 Reports
+                        </li>
+
             <li className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105" onClick={() => setActivePage("videos")}>
               🎥 Watch Videos
             </li>
