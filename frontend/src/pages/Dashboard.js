@@ -12,6 +12,9 @@ const Dashboard = () => {
   const [rankingUnlocked, setRankingUnlocked] = useState(
     localStorage.getItem("rankingUnlocked") === "true"
   );
+  const [reportsUnlocked, setReportsUnlocked] = useState(
+      localStorage.getItem("reportsUnlocked") === "true"
+  );
   const userEmail = localStorage.getItem("userEmail");
 
   useEffect(() => {
@@ -23,12 +26,14 @@ const Dashboard = () => {
   useEffect(() => {
     setGenderIdentificationUnlocked(localStorage.getItem("genderIdentificationUnlocked") === "true");
     setRankingUnlocked(localStorage.getItem("rankingUnlocked") === "true");
+    setReportsUnlocked(localStorage.getItem("reportsUnlocked") === "true");
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("genderIdentificationUnlocked");
     localStorage.removeItem("rankingUnlocked");
+    localStorage.removeItem("reportsUnlocked");
     window.location.href = "http://localhost:3000";
   };
 
@@ -42,6 +47,11 @@ const Dashboard = () => {
     setRankingUnlocked(true);
     localStorage.removeItem("genderIdentificationUnlocked");
     setGenderIdentificationUnlocked(false);
+  };
+
+  const unlockReports = () => {
+      localStorage.setItem("reportsUnlocked", "true");
+      setReportsUnlocked(true);
   };
 
   const renderPage = () => {
@@ -62,7 +72,7 @@ const Dashboard = () => {
       case "ranking":
         return genderIdentificationUnlocked ? <RankingGender unlockRanking={unlockRanking} /> : <h2>Please Proceed To Ranking Page</h2>;
       case "rankingPage":
-        return rankingUnlocked ? <RankingPage /> : <h2>Access Denied</h2>;
+        return rankingUnlocked ? <RankingPage unlockReports={unlockReports} /> : <h2>Access Denied</h2>;
       default:
         return <h2>Page Not Found</h2>;
     }
@@ -83,12 +93,6 @@ const Dashboard = () => {
             <li className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105" onClick={() => setActivePage("dashboard")}>
               🏠 Home
             </li>
-            <li
-                          className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105"
-                          onClick={() => setActivePage("reports")}
-                        >
-                          📊 Reports
-                        </li>
 
             <li className="p-3 cursor-pointer rounded hover:bg-blue-600 transition-transform transform hover:scale-105" onClick={() => setActivePage("videos")}>
               🎥 Watch Videos
@@ -104,6 +108,9 @@ const Dashboard = () => {
               onClick={() => rankingUnlocked && setActivePage("rankingPage")}
             >
               🏆 Ranking Page
+            </li>
+            <li className={`p-3 ${reportsUnlocked ? "cursor-pointer hover:bg-blue-600" : "opacity-50 cursor-not-allowed"}`} onClick={() => reportsUnlocked && setActivePage("reports")}>
+                📊 Reports
             </li>
             <li className="p-3 cursor-pointer rounded hover:bg-red-600 transition-transform transform hover:scale-105" onClick={handleLogout}>🚪 Logout</li>
           </ul>

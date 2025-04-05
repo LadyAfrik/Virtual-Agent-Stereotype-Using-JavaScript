@@ -23,7 +23,7 @@ const attributes = [
   { name: "organized", category: "Competence trait" },
 ];
 
-const RankingPage = () => {
+const RankingPage = ({ unlockReports }) => {
   const [randomizedVideos, setRandomizedVideos] = useState([]);
   const [randomizedAttributes, setRandomizedAttributes] = useState([]);
   const [currentAttributeIndex, setCurrentAttributeIndex] = useState(0);
@@ -99,6 +99,12 @@ const RankingPage = () => {
         setRankings({});
       } else {
         alert("Ranking completed!");
+
+         // Unlock Reports page here
+        localStorage.setItem("reportsUnlocked", "true");
+        if (typeof unlockReports === "function") {
+          unlockReports();
+        }
         localStorage.removeItem("rankingUnlocked"); // Lock the page again
         window.location.reload(); // Reload the page to enforce the lock
       }

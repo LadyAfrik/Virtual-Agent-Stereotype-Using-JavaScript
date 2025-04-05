@@ -84,7 +84,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 py-12"> {/* Added padding */}
+    <div className="bg-animated-gradient flex justify-center items-center min-h-screen">
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
@@ -160,7 +160,9 @@ const Register = () => {
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+            className={`w-full p-2 rounded-md ${
+              loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+            } text-white`}
             disabled={loading}
           >
             {loading ? "Registering..." : "Register"}

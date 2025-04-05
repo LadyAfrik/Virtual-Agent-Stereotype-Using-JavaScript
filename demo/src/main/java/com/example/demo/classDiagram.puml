@@ -1,0 +1,167 @@
+@startuml
+
+' User entity
+class User {
+    + id : Long
+    + email : String
+    + gender : String
+    + age : int
+    + levelOfStudy : String
+    + affiliation : String
+    + password : String
+    + watchedTheVideos : int
+    + takenTheSurvey : int
+    + lastWatchedVideo : int
+    + getId() : Long
+    + setId(Long id)
+    + getEmail() : String
+    + setEmail(String email)
+    + getGender() : String
+    + setGender(String gender)
+    + getAge() : int
+    + setAge(int age)
+    + getLevelOfStudy() : String
+    + setLevelOfStudy(String levelOfStudy)
+    + getAffiliation() : String
+    + setAffiliation(String affiliation)
+    + getPassword() : String
+    + setPassword(String password)
+    + getWatchedTheVideos() : int
+    + setWatchedTheVideos(int watchedTheVideos)
+    + getTakenTheSurvey() : int
+    + setTakenTheSurvey(int takenTheSurvey)
+    + getLastWatchedVideo() : int
+    + setLastWatchedVideo(int lastWatchedVideo)
+}
+
+' AttributeRanking entity
+class AttributeRanking {
+    + id : Long
+    + userEmail : String
+    + agentName : String
+    + attribute : String
+    + category : String
+    + ranking : int
+    + createdAt : LocalDateTime
+    + onCreate() : void
+}
+
+' GenderSelection entity
+class GenderSelection {
+    + id : Long
+    + userEmail : String
+    + agentName : String
+    + selectedGender : String
+    + createdAt : LocalDateTime
+    + getId() : Long
+    + setId(Long id)
+    + getUserEmail() : String
+    + setUserEmail(String userEmail)
+    + getAgentName() : String
+    + setAgentName(String agentName)
+    + getSelectedGender() : String
+    + setSelectedGender(String selectedGender)
+    + getCreatedAt() : LocalDateTime
+    + setCreatedAt(LocalDateTime createdAt)
+}
+
+' Repositories
+class UserRepository {
+    + findByEmail(String email) : Optional<User>
+}
+class AttributeRankingRepository {
+    + save(AttributeRanking ranking) : void
+}
+class GenderSelectionRepository {
+    + save(GenderSelection selection) : void
+}
+
+' Services
+class AttributeRankingService {
+    + saveAttributeRanking(AttributeRanking attributeRanking) : void
+}
+class GenderSelectionService {
+    + saveGenderSelection(GenderSelection genderSelection) : void
+}
+
+' Controllers
+class AuthController {
+    + register(Map<String, String> requestBody) : ResponseEntity<String>
+    + login(Map<String, String> requestBody) : ResponseEntity<?>
+    + getAffiliation(Map<String, String> requestBody) : ResponseEntity<?>
+}
+class AttributeRankingController {
+    + saveAttributeRanking(AttributeRanking attributeRanking) : ResponseEntity<String>
+}
+class GenderSelectionController {
+    + saveGenderSelection(GenderSelection genderSelection) : ResponseEntity<String>
+}
+class UserController {
+    + createUser(User user) : User
+    + getAllUsers() : List<User>
+    + checkAccess(Map<String, String> request) : ResponseEntity<?>
+    + getAffiliation(Map<String, String> request, String authHeader) : ResponseEntity<?>
+    + updateVideoProgress(Map<String, Object> request) : ResponseEntity<?>
+    + restartVideos(Map<String, String> request) : ResponseEntity<?>
+    + checkVideoProgress(String email) : ResponseEntity<?>
+}
+
+' Security
+interface UserDetails {
+    + getUsername() : String
+    + getPassword() : String
+    + getAuthorities() : Collection<? extends GrantedAuthority>
+    + isAccountNonExpired() : boolean
+    + isAccountNonLocked() : boolean
+    + isCredentialsNonExpired() : boolean
+    + isEnabled() : boolean
+}
+class CustomUserDetails {
+    + getUsername() : String <<overrides>>
+    + getPassword() : String <<overrides>>
+    + getAuthorities() : Collection<? extends GrantedAuthority>
+    + getGender() : String
+    + getAge() : int
+    + getLevelOfStudy() : String
+    + getAffiliation() : String
+    + isAccountNonExpired() : boolean
+    + isAccountNonLocked() : boolean
+    + isCredentialsNonExpired() : boolean
+    + isEnabled() : boolean
+}
+class CustomUserDetailsService {
+    + loadUserByUsername(String email) : UserDetails
+}
+class JwtUtil {
+    + generateToken(User user) : String
+    + extractUsername(String token) : String
+    + validateToken(String token, UserDetails userDetails) : boolean
+}
+class JwtAuthenticationFilter {
+    + doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) : void
+}
+class SecurityConfig {
+    + securityFilterChain(HttpSecurity http) : SecurityFilterChain
+    + corsConfigurationSource() : CorsConfigurationSource
+}
+
+' Relationships and Cardinalities
+UserRepository --> User : "1-to-1"
+AttributeRankingRepository --> AttributeRanking : "1-to-1"
+GenderSelectionRepository --> GenderSelection : "1-to-1"
+CustomUserDetails <|-- UserDetails : "implements"
+User "1" --> "many" AttributeRanking
+AttributeRanking "many" --> "many" GenderSelection
+AttributeRankingRepository <-- AttributeRankingService
+GenderSelectionRepository <-- GenderSelectionService
+AttributeRankingService <-- AttributeRankingController
+GenderSelectionService <-- GenderSelectionController
+UserRepository <-- AuthController
+JwtUtil <-- AuthController
+JwtUtil <-- JwtAuthenticationFilter
+CustomUserDetails <-- User : "1-to-1"
+CustomUserDetailsService <-- UserRepository
+CustomUserDetailsService <-- JwtAuthenticationFilter
+CustomUserDetails <-- SecurityConfig
+
+@enduml
