@@ -5,23 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        /* General Styles */
+        html {
+            scroll-behavior: smooth;
+        }
 
-        }
-        .dashboard-wrapper {
-            display: flex;
-            width: 100%;
+        html, body {
             height: 100%;
-            gap: 10px;
+            margin: 0;
+            overflow: auto;
         }
+
+        /* Dashboard Card Styles */
         .dashboard-card {
             width: 90%;
             max-width: 1200px;
@@ -32,387 +27,284 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
         }
 
-        .card-content {
-            width: 100%;
-            display: none; /* All cards are hidden by default */
-        }
-
-        .card-content.active {
-            display: block; /* Only the active card is visible */
-        }
-        .section-title {
-            text-align: center;
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #444;
-        }
-
-
-        .dashboard-section {
-            flex: 1;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin: 10px;
-        }
-        .user-engagement-metrics {
+        .dashboard-charts-wrapper {
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
-        .stats-container {
+
+        /* Hover Effects for Dashboard Card */
+        .dashboard-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Layout for Chart Rows */
+        .top-row-charts, .bottom-row-charts {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
             justify-content: space-between;
-            margin-bottom: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
-        .stat-card {
-            width: calc(30% - 10px); /* Shrinking card width to fit 3 in a row */
-            padding: 10px;
+
+        /* Individual Chart Card Styles */
+        .chart-card, .left-side-charts, .right-side-charts {
+            flex: 1;
+            background-color: #fff;
+            padding: 15px;
             border-radius: 10px;
-            background-color: #eef3fc;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 250px;
+        }
+
+        /* Canvas Styles for Charts */
+        .chart-card canvas, .left-side-charts canvas, .right-side-charts canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        /* Title Styles */
+        .section-title, .chart-title {
             text-align: center;
-        }
-        .stat-title {
-            font-size: 1em;
-            color: #333;
-            margin-bottom: 5px;
             font-weight: bold;
-        }
-        .stat-value {
-            font-size: 1.2em;
-            color: #2196f3;
-            font-weight: bold;
-        }
-        .chart-container {
-            width: 100%;
-            max-width: 800px;
-            margin: 20px auto;
-        }
-        .chart-row {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            align-items: center;
-        }
-        .chart-row canvas {
-            width: 800px; /* Increase the width */
-            height: 400px; /* Increase the height */
-            flex: none; /* Prevent resizing based on flex */
+            color: #444;
         }
 
         .section-title {
-            text-align: center;
             font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #444;
-        }
-        .chart-title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            color: #444;
-        }
-        .placeholder {
-            text-align: center;
-            font-size: 1.2em;
-            color: #888;
-            margin-top: 50px;
-        }
-        .navigation-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
+            margin-bottom: 20px;
         }
 
-        .navigation-buttons button {
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background-color: #2196f3;
-            color: white;
-            cursor: pointer;
+        .chart-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        /* List Style for Stats Summary */
+        .chart-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 1.05em;
+            color: #2c3e50;
+            font-weight: 500;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .chart-card ul li {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #f2f6fa;
+            padding: 10px 14px;
+            border-radius: 8px;
             transition: background-color 0.3s ease;
         }
 
-        .navigation-buttons button:hover {
-            background-color: #1769aa;
+        .chart-card ul li:hover {
+            background-color: #e6eff7;
         }
 
+        .chart-card ul li strong {
+            min-width: 200px;
+            display: inline-block;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .chart-card ul li span {
+            color: #2c3e50;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="dashboard-card">
-        <!-- First Card: User Engagement Metrics -->
-        <div class="card-content active">
-            <h2 class="section-title">User Engagement Metrics</h2>
-            <!-- Statistics Cards -->
-            <div class="stats-container">
-                <div class="stat-card">
-                    <p class="stat-title">Total Users</p>
-                    <p class="stat-value">{{ total_users }}</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-title">Male Users (%)</p>
-                    <p class="stat-value">{{ percentage_males }}</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-title">Female Users (%)</p>
-                    <p class="stat-value">{{ percentage_females }}</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-title">Mean Age</p>
-                    <p class="stat-value">{{ mean_age }}</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-title">Age Std Dev</p>
-                    <p class="stat-value">{{ std_dev_age }}</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-title">Lowest Age</p>
-                    <p class="stat-value">{{ min_age }}</p>
-                </div>
-                <div class="stat-card">
-                    <p class="stat-title">Highest Age</p>
-                    <p class="stat-value">{{ max_age }}</p>
-                </div>
-            </div>
+
+<!-- Dashboard Wrapper -->
+<div class="dashboard-charts-wrapper">
+
+    <!-- Top Row of Charts -->
+    <div class="top-row-charts">
+        <!-- Demographic Summary Card -->
+        <div class="chart-card">
+            <h3 class="chart-title">User Demographics Summary</h3>
+            <ul id="summaryStats">
+                <li><strong>👥 Total Users:</strong> <span>{{ total_users }}</span></li>
+                <li><strong>♂️ Male Users (%):</strong> <span>{{ percentage_males }}</span></li>
+                <li><strong>♀️ Female Users (%):</strong> <span>{{ percentage_females }}</span></li>
+                <li><strong>📊 Mean Age:</strong> <span>{{ mean_age }}</span></li>
+                <li><strong>📈 Standard Deviation (Age):</strong> <span>{{ std_dev_age }}</span></li>
+                <li><strong>👶 Youngest User Age:</strong> <span>{{ min_age }}</span></li>
+                <li><strong>👴 Oldest User Age:</strong> <span>{{ max_age }}</span></li>
+            </ul>
         </div>
 
-            <!-- Second Card: Last Watched Videos -->
-            <!-- Video Bar Chart -->
-            <div class="card-content">
-                <h3 class="chart-title">Last Watched Videos</h3>
-                <canvas id="videosChart"></canvas>
-            </div>
+        <!-- Last Watched Videos Chart -->
+        <div class="chart-card">
+            <h3 class="chart-title">Last Watched Videos</h3>
+            <canvas id="videosChart"></canvas>
+        </div>
 
-            <!-- Doughnut and Pie Charts -->
-             <!-- Third Card: Video Insights -->
-        <div class="card-content">
-            <h2 class="section-title">Video Insights</h2>
-            <div class="chart-row">
-                <div>
-                    <h3 class="chart-title">Watched All Videos</h3>
-                    <canvas id="progressChart"></canvas>
-                </div>
-                <div>
+        <!-- Watched vs Not Watched and Watched All Videos Charts -->
+        <div class="chart-card">
+            <div style="display: flex; justify-content: space-between; gap: 10px;">
+                <div style="flex: 1; text-align: center;">
                     <h3 class="chart-title">Watched vs Not Watched</h3>
                     <canvas id="watchedChart"></canvas>
                 </div>
+                <div style="flex: 1; text-align: center;">
+                    <h3 class="chart-title">Watched All Videos</h3>
+                    <canvas id="progressChart"></canvas>
+                </div>
             </div>
         </div>
-        
-        <!-- Gender Prediction Results Section -->
-     <!-- Fourth Card: Gender Prediction Results -->
-     <div class="card-content">
-        <h2 class="section-title">Gender Prediction Results</h2>
-        <div class="chart-row">
-            <div>
-                <canvas id="genderStackedBarChart"></canvas>
-            </div>
-            <div>
-                <canvas id="genderHeatmap"></canvas>
-            </div>
-        </div>
-      </div>
-     
+    </div>
 
-        
-        
-         <!-- Fifth Card: Attribute Rankings -->
-         <div class="card-content">
+    <!-- Bottom Row of Charts -->
+    <div class="bottom-row-charts">
+        <div class="left-side-charts">
+            <!-- Stacked Bar and Heatmap Charts for Gender Predictions -->
+            <canvas id="genderStackedBarChart"></canvas>
+            <canvas id="genderHeatmap"></canvas>
+        </div>
+
+        <div class="right-side-charts">
             <h2 class="section-title">Attribute Rankings</h2>
-        
-            <!-- Dropdown to Select Attribute -->
-            <label for="attributeDropdown" style="font-size: 1.2em; margin-bottom: 10px;">Select Attribute:</label>
-            <select id="attributeDropdown" style="width: 200px; padding: 5px; font-size: 1em;">
-                {% for attribute in attributes %}
-                    <option value="{{ attribute }}">{{ attribute }}</option>
-                {% endfor %}
-            </select>
-        
-            <!-- Chart Type Toggle -->
-            <div style="margin-top: 15px; font-size: 1.1em;">
-                <label>
-                    <input type="radio" name="chartType" value="horizontal" checked> Horizontal Bar Chart
-                </label>
-                <label style="margin-left: 10px;">
-                    <input type="radio" name="chartType" value="stacked"> Stacked Bar Chart
-                </label>
-            </div>
-        <div class="chart-row">
-            <!-- Horizontal Bar Chart Canvas -->
-            <div class="chart-container" style="margin-top: 20px;">
+            <label for="attributeDropdown">Select Attribute:</label>
+            <select id="attributeDropdown"></select>
+
+            <!-- Horizontal Bar Chart for Attribute Rankings -->
+            <div id="horizontalChartContainer">
                 <h3 class="chart-title" id="horizontalChartTitle">Horizontal Bar Chart: Attribute Rankings</h3>
                 <canvas id="horizontalBarChart"></canvas>
             </div>
-        
-            <!-- Stacked Bar Chart Canvas -->
-            <div class="chart-container" style="margin-top: 20px; display: none;" id="stackedChartContainer">
-                <h3 class="chart-title" id="stackedChartTitle">Stacked Bar Chart: Attribute Rankings</h3>
-                <canvas id="stackedBarChart"></canvas>
-            </div>
         </div>
-        </div>        
-        
-      <!-- Navigation Buttons -->
-      <div class="navigation-buttons">
-        <button id="prevButton">Back</button>
-        <button id="nextButton">Next</button>
-     </div>
+    </div>
 </div>
 
+<script>
+    // -------------------------------
+    // Last Watched Videos Distribution Bar Chart
+    // -------------------------------
+    const videosCtx = document.getElementById('videosChart').getContext('2d');
+    const videosData = {
+        labels: {{ last_watched_labels|safe }},
+        datasets: [{
+            label: 'Users',
+            data: {{ last_watched_counts|safe }},
+            backgroundColor: ['#2196f3', '#ff9800', '#9c27b0']
+        }]
+    };
+    new Chart(videosCtx, { type: 'bar', data: videosData });
 
-    <script>
-        // Bar Chart: Distribution of Last Watched Videos
-        const videosCtx = document.getElementById('videosChart').getContext('2d');
-        const videosData = {
-            labels: {{ last_watched_labels|safe }},
+    // -------------------------------
+    // Percentage of Users Who Watched All Videos Doughnut Chart
+    // -------------------------------
+    const progressCtx = document.getElementById('progressChart').getContext('2d');
+    const progressData = {
+        labels: ['Watched All Videos', 'Remaining'],
+        datasets: [{
+            label: '% of Users',
+            data: [{{ percentage_watched_all }}, {{ remaining_percentage }}],
+            backgroundColor: ['#4caf50', '#f44336']
+        }]
+    };
+    new Chart(progressCtx, { type: 'doughnut', data: progressData });
+
+    // -------------------------------
+    // Watched vs Not Watched Pie Chart
+    // -------------------------------
+    const watchedCtx = document.getElementById('watchedChart').getContext('2d');
+    const watchedData = {
+        labels: ['Watched', 'Not Watched'],
+        datasets: [{
+            data: [{{ watched_vs_not.watched }}, {{ watched_vs_not.not_watched }}],
+            backgroundColor: ['#4caf50', '#f44336']
+        }]
+    };
+    new Chart(watchedCtx, { type: 'pie', data: watchedData });
+
+    // -------------------------------
+    // Stacked Bar Chart for Gender Predictions
+    // -------------------------------
+    const genderStackedBarCtx = document.getElementById('genderStackedBarChart').getContext('2d');
+    const stackedBarData = {{ stacked_bar_data|safe }};
+    const labels = Object.keys(stackedBarData);
+    const maleData = labels.map(agent => stackedBarData[agent]['Male']);
+    const femaleData = labels.map(agent => stackedBarData[agent]['Female']);
+    const androgynousData = labels.map(agent => stackedBarData[agent]['Androgynous']);
+
+    new Chart(genderStackedBarCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                { label: 'Male', data: maleData, backgroundColor: '#2196f3' },
+                { label: 'Female', data: femaleData, backgroundColor: '#ff9800' },
+                { label: 'Androgynous', data: androgynousData, backgroundColor: '#9c27b0' }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Gender Predictions by Agent' }
+            }
+        }
+    });
+
+    // -------------------------------
+    // Heatmap: Gender Choices Frequency Bar Chart
+    // -------------------------------
+    const genderHeatmapCtx = document.getElementById('genderHeatmap').getContext('2d');
+    new Chart(genderHeatmapCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
             datasets: [{
-                label: 'Users',
-                data: {{ last_watched_counts|safe }},
+                label: 'Frequency',
+                data: labels.map(agent => Object.values(stackedBarData[agent]).reduce((a, b) => a + b)),
                 backgroundColor: ['#2196f3', '#ff9800', '#9c27b0']
             }]
-        };
-        new Chart(videosCtx, {
-            type: 'bar',
-            data: videosData
-        });
-
-        // Doughnut Chart: Percentage of Users Who Watched All Videos
-        const progressCtx = document.getElementById('progressChart').getContext('2d');
-        const progressData = {
-            labels: ['Watched All Videos', 'Remaining'],
-            datasets: [{
-                label: '% of Users',
-                data: [{{ percentage_watched_all }}, {{ remaining_percentage }}],
-                backgroundColor: ['#4caf50', '#f44336']
-            }]
-        };
-        new Chart(progressCtx, {
-            type: 'doughnut',
-            data: progressData
-        });
-
-        // Pie Chart: Watched vs. Not Watched
-        const watchedCtx = document.getElementById('watchedChart').getContext('2d');
-        const watchedData = {
-            labels: ['Watched', 'Not Watched'],
-            datasets: [{
-                data: [{{ watched_vs_not.watched }}, {{ watched_vs_not.not_watched }}],
-                backgroundColor: ['#4caf50', '#f44336']
-            }]
-        };
-        new Chart(watchedCtx, {
-            type: 'pie',
-            data: watchedData
-        });
-    </script>
-    <script>
-        // Gender Predictions Stacked Bar Chart
-        const genderStackedBarCtx = document.getElementById('genderStackedBarChart').getContext('2d');
-        const stackedBarData = {{ stacked_bar_data|safe }};
-        const labels = Object.keys(stackedBarData);  // Real agent names
-        const maleData = labels.map(agent => stackedBarData[agent]['Male']);
-        const femaleData = labels.map(agent => stackedBarData[agent]['Female']);
-        const androgynousData = labels.map(agent => stackedBarData[agent]['Androgynous']);
-    
-        new Chart(genderStackedBarCtx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Male',
-                        data: maleData,
-                        backgroundColor: '#2196f3',
-                    },
-                    {
-                        label: 'Female',
-                        data: femaleData,
-                        backgroundColor: '#ff9800',
-                    },
-                    {
-                        label: 'Androgynous',
-                        data: androgynousData,
-                        backgroundColor: '#9c27b0',
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Gender Predictions by Agent'
-                    }
-                }
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Frequency of Gender Choices' }
             }
-        });
-    
-        // Gender Choices Heatmap
-        const genderHeatmapCtx = document.getElementById('genderHeatmap').getContext('2d');
-        new Chart(genderHeatmapCtx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Frequency',
-                        data: labels.map(agent => Object.values(stackedBarData[agent]).reduce((a, b) => a + b)),
-                        backgroundColor: ['#2196f3', '#ff9800', '#9c27b0'],
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    title: {
-                        display: true,
-                        text: 'Frequency of Gender Choices'
-                    }
-                }
-            }
-        });
-    </script>
+        }
+    });
 
-<script>
+    // -------------------------------
+    // Horizontal Bar Chart for Attribute Rankings
+    // -------------------------------
     const boxplotData = {{ boxplot_data|safe }};
     const attributes = {{ attributes|safe }};
     const dropdown = document.getElementById('attributeDropdown');
-    const chartTypeToggles = document.getElementsByName('chartType');
     const horizontalBarChartCtx = document.getElementById('horizontalBarChart').getContext('2d');
-    const stackedBarChartCtx = document.getElementById('stackedBarChart').getContext('2d');
-    const stackedChartContainer = document.getElementById('stackedChartContainer');
+    let horizontalChart;
 
-    let horizontalChart, stackedChart;
+    // Populate dropdown with attributes
+    attributes.forEach(attr => {
+        const option = document.createElement('option');
+        option.value = attr;
+        option.textContent = attr;
+        dropdown.appendChild(option);
+    });
 
-    // Render Horizontal Bar Chart
+    // Render horizontal bar chart
     const renderHorizontalBarChart = (selectedAttribute) => {
         const dataForAgents = boxplotData[selectedAttribute];
         const labels = Object.keys(dataForAgents);
-        const values = labels.map(agent => dataForAgents[agent][0]); // Rankings for the attribute
+        const values = labels.map(agent => dataForAgents[agent][0]);
 
-        // Destroy existing chart instance
-        if (horizontalChart) horizontalChart.destroy();
+        if (horizontalChart) horizontalChart.destroy(); // Destroy previous chart instance
 
         horizontalChart = new Chart(horizontalBarChartCtx, {
             type: 'bar',
@@ -421,131 +313,41 @@
                 datasets: [{
                     label: `Rankings for ${selectedAttribute}`,
                     data: values,
-                    backgroundColor: labels.map(() => `hsl(${Math.random() * 360}, 70%, 50%)`),
+                    backgroundColor: labels.map(() => `hsl(${Math.random() * 360}, 70%, 50%)`)
                 }]
             },
             options: {
                 responsive: true,
-                indexAxis: 'y', // Horizontal bar chart
+                indexAxis: 'y',
                 plugins: {
                     title: {
                         display: true,
                         text: `Horizontal Bar Chart: Rankings for "${selectedAttribute}"`
                     },
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: false }
                 },
                 scales: {
                     x: {
                         beginAtZero: true,
-                        max: 3 // Rankings go from 1 to 3
+                        max: 3 // Set max value for rankings
                     }
                 }
             }
         });
     };
 
-    // Render Stacked Bar Chart
-    const renderStackedBarChart = (selectedAttribute) => {
-        const dataForAgents = boxplotData[selectedAttribute];
-        const labels = Object.keys(dataForAgents);
-        const values = labels.map(agent => dataForAgents[agent][0]);
-
-        // Destroy existing chart instance
-        if (stackedChart) stackedChart.destroy();
-
-        stackedChart = new Chart(stackedBarChartCtx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: selectedAttribute,
-                    data: values,
-                    backgroundColor: `hsl(${Math.random() * 360}, 70%, 50%)`
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: `Stacked Bar Chart: Rankings for "${selectedAttribute}"`
-                    },
-                    legend: {
-                        position: 'top'
-                    }
-                },
-                scales: {
-                    x: {
-                        stacked: true,
-                        beginAtZero: true,
-                        max: 3 // Rankings go from 1 to 3
-                    },
-                    y: {
-                        stacked: true
-                    }
-                }
-            }
-        });
-    };
-
-    // Event Listener for Dropdown Change
+    // Event listener for attribute selection
     dropdown.addEventListener('change', () => {
         const selectedAttribute = dropdown.value;
-        const selectedChartType = [...chartTypeToggles].find(radio => radio.checked).value;
-
-        if (selectedChartType === 'horizontal') {
-            renderHorizontalBarChart(selectedAttribute);
-            stackedChartContainer.style.display = 'none';
-        } else {
-            renderStackedBarChart(selectedAttribute);
-            stackedChartContainer.style.display = 'block';
-        }
+        renderHorizontalBarChart(selectedAttribute);
     });
 
-    // Event Listener for Chart Type Toggle
-    chartTypeToggles.forEach(toggle => {
-        toggle.addEventListener('change', () => {
-            const selectedAttribute = dropdown.value;
-            const selectedChartType = toggle.value;
-
-            if (selectedChartType === 'horizontal') {
-                renderHorizontalBarChart(selectedAttribute);
-                stackedChartContainer.style.display = 'none';
-            } else {
-                renderStackedBarChart(selectedAttribute);
-                stackedChartContainer.style.display = 'block';
-            }
-        });
-    });
-
-    // Initial Render
-    renderHorizontalBarChart(attributes[0]); // Default to first attribute
+    // Initial render of horizontal bar chart
+    if (attributes.length > 0) {
+        dropdown.value = attributes[0];
+        renderHorizontalBarChart(attributes[0]);
+    }
 </script>
-
-<script>
-    const cards = document.querySelectorAll('.card-content');
-    let currentCardIndex = 0;
-
-    document.getElementById('nextButton').addEventListener('click', () => {
-        if (currentCardIndex < cards.length - 1) {
-            cards[currentCardIndex].classList.remove('active');
-            currentCardIndex++;
-            cards[currentCardIndex].classList.add('active');
-        }
-    });
-
-    document.getElementById('prevButton').addEventListener('click', () => {
-        if (currentCardIndex > 0) {
-            cards[currentCardIndex].classList.remove('active');
-            currentCardIndex--;
-            cards[currentCardIndex].classList.add('active');
-        }
-    });
-</script>
-
-    
 
 </body>
 </html>
