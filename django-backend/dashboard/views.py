@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
+import csv
 from .models import AttributeRanking, Users, GenderSelection
 from .utils import fetch_ranking_data, perform_stat_test, interpret_findings, perform_friedman_test
 from django.db.models import Count, Avg, StdDev, Min, Max
@@ -12,6 +13,7 @@ from .serializers import (
 )
 
 # --- Function-Based Views ---
+
 def home(request):
     """
     Simple view to test if Django is working.
@@ -108,8 +110,6 @@ def dashboard_page(request):
 
     return render(request, 'dashboard/dashboard.html', context)
 
-
-
 def ranking_analysis_view(request):
     # Fetch data and run both tests
     ranking_data = fetch_ranking_data()
@@ -124,6 +124,10 @@ def ranking_analysis_view(request):
     interpretation_kw = interpret_findings(test_results_kw)
     interpretation_friedman = interpret_findings(test_results_friedman)
 
+    # Traditional interpretations based on p-value thresholds
+    traditional_interpretation_kw = "The Kruskal-Wallis test results show a statistical significance if the p-value is below 0.05. If the p-value is higher, the differences between groups are not statistically significant."
+    traditional_interpretation_friedman = "The Friedman test indicates a significant difference between agents if the p-value is less than 0.05. Otherwise, no significant difference is detected."
+
     # Pass the data and test results to the template
     context = {
         'ranking_data': ranking_data[:10],  # Show the first 10 rows
@@ -131,10 +135,64 @@ def ranking_analysis_view(request):
         'test_results_friedman': test_results_friedman,  # Add Friedman results
         'interpretation_kw': interpretation_kw,
         'interpretation_friedman': interpretation_friedman,  # Add Friedman interpretation
+        'traditional_interpretation_kw': traditional_interpretation_kw,
+        'traditional_interpretation_friedman': traditional_interpretation_friedman,
     }
     return render(request, 'dashboard/statistical_analysis.html', context)
 
 
+
+def download_users(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'email', 'gender', 'age', 'level_of_study',
+        'affiliation', 'password', 'watched_the_videos', 'last_watched_video'
+    ])
+
+    for user in Users.objects.all():
+        writer.writerow([
+            user.email, user.gender, user.age, user.level_of_study,
+            user.affiliation, user.password, user.watched_the_videos, user.last_watched_video
+        ])
+
+    return response
+
+
+def download_attribute_rankings(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="attribute_rankings.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'user_email', 'agent_name', 'attribute', 'category', 'ranking', 'created_at'
+    ])
+
+    for r in AttributeRanking.objects.all():
+        writer.writerow([
+            r.user_email, r.agent_name, r.attribute, r.category, r.ranking, r.created_at
+        ])
+
+    return response
+
+
+def download_gender_selections(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="gender_selections.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow([
+        'user_email', 'agent_name', 'selected_gender', 'created_at'
+    ])
+
+    for g in GenderSelection.objects.all():
+        writer.writerow([
+            g.user_email, g.agent_name, g.selected_gender, g.created_at
+        ])
+
+    return response
 
 # --- API Views ---
 

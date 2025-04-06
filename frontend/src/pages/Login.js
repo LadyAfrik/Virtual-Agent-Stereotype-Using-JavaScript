@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal"; // ✅ Make sure this path is correct
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -23,22 +27,40 @@ const Login = () => {
       if (response.ok) {
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("userEmail", email);
-
-        alert("Login Successful!");
-        navigate("/dashboard");
+        setModalMessage("Login Successful!");
+        setModalOpen(true);
       } else {
-        alert("Login Failed: " + (data.error || "Invalid email or password"));
+        setModalMessage("Login Failed: " + (data.error || "Invalid email or password"));
+        setModalOpen(true);
       }
     } catch (error) {
       console.error("Error logging in:", error);
-      alert("An error occurred. Please try again.");
+      setModalMessage("An error occurred. Please try again.");
+      setModalOpen(true);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleModalConfirm = () => {
+    setModalOpen(false);
+    if (modalMessage === "Login Successful!") {
+      navigate("/dashboard");
+    }
+  };
+
   return (
     <div className="bg-animated-gradient flex justify-center items-center min-h-screen">
+      <Modal
+        isOpen={modalOpen}
+        title="Notice"
+        message={modalMessage}
+        onConfirm={handleModalConfirm}
+        onCancel={() => setModalOpen(false)}
+        confirmText="OK"
+        cancelText="Close"
+      />
+
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
         <form onSubmit={handleLogin}>
@@ -67,7 +89,7 @@ const Login = () => {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        {/* Links for navigation */}
+
         <div className="mt-4 text-center">
           <p className="text-sm">
             Don't have an account yet?{" "}

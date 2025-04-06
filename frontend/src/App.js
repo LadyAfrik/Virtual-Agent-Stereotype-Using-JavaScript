@@ -6,6 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import DashboardContent from "./pages/DashboardContent";
 import VideoPage from "./pages/VideoPage";
 import AuthService from "./AuthService";
+import ProcessingSketch from "./components/ProcessingSketch";
+import ProcessingHeart from "./components/ProcessingHeart";
+import ProcessingGun from "./components/ProcessingGun";
 import './App.css'; // Import your CSS here
 
 
@@ -274,8 +277,9 @@ const App = () => {
           </div>
 
           <div className="w-full md:max-w-md md:mx-auto lg:w-1/2 lg:px-8 mt-12 md:mt-0">
-            <div className="bg-gray-400 w-full h-72 rounded-lg"></div>
-            <p className="italic text-sm mt-2 text-center">Aenean ante nisi, gravida non mattis semper.</p>
+               {/* Use the ProcessingSketch component here */}
+               <ProcessingSketch />
+               <p className="italic text-sm mt-2 text-center alert">Here is One of the Students Assignments. Feel Free to Play with Your Mouse</p>
           </div>
         </div>
       </section>
@@ -296,17 +300,18 @@ const App = () => {
         <div className="md:flex mt-12 md:-mx-4">
           <div className="md:px-4 md:w-1/2 xl:w-1/4">
             <div className="bg-white rounded border border-gray-300">
-              <div className="w-full h-48 overflow-hidden bg-gray-300"></div>
+              <div className="w-full h-48 overflow-hidden bg-gray-300">
+                    {/* Use the ProcessingHeart component here */}
+                  <ProcessingHeart />
+              </div>
               <div className="p-4">
                 <div className="flex items-center text-sm">
                   <span className="text-teal-500 font-semibold">Course</span>
                   <span className="ml-4 text-gray-600">29 Feb, 2025</span>
                 </div>
-                <p className="text-lg font-semibold leading-tight mt-4">Course Highlights</p>
+                <p className="text-lg font-semibold leading-tight mt-4">Heart Shape Dynamics: A Visual Exploration</p>
                 <p className="text-gray-600 mt-1">
-                  Explore the core features of the course, from interactive software projects to interdisciplinary design approaches.
-                  This section will give you a glimpse into the hands-on experiences, key topics covered, and the learning outcomes
-                  you can expect throughout the course.
+                  This interactive project dynamically generates a grid of heart shapes that change in size and color based on the movement of your mouse. The shapes respond to your interactions in real-time, creating a visually appealing and responsive pattern of colors and forms..
                 </p>
                 <div className="flex items-center mt-4">
                   <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300"></div>
@@ -322,17 +327,20 @@ const App = () => {
 
           <div className="md:px-4 md:w-1/2 xl:w-1/4 mt-4 md:mt-0">
             <div className="bg-white rounded border border-gray-300">
-              <div className="w-full h-48 overflow-hidden bg-gray-300"></div>
+              <div className="w-full h-48 overflow-hidden bg-gray-300">
+                {/* Use the ProcessingSketch component here */}
+                 <ProcessingGun />
+              </div>
               <div className="p-4">
                 <div className="flex items-center text-sm">
                   <span className="text-teal-500 font-semibold">Course</span>
                   <span className="ml-4 text-gray-600">05 Mar, 2025</span>
                 </div>
-                <p className="text-lg font-semibold leading-tight mt-4">Course Overview</p>
+                <p className="text-lg font-semibold leading-tight mt-4">Dynamic Grid of Rotating Guns: Interactive Animation</p>
                 <p className="text-gray-600 mt-1">
-                  This section provides a brief introduction to the course content, offering insights into the key concepts and
-                  skills you will gain, and serves as a gateway to more detailed information about the course structure, assignments,
-                  and learning objectives.
+                  Explore a grid of rotating gun shapes that change in size, color, and rotation based on your mouse movement.
+                  The interactive display creates a lively, ever-changing visual pattern. Adjust your position on the screen to dynamically
+                  alter the visual experience, showcasing vibrant colors and smooth animations.
                 </p>
                 <div className="flex items-center mt-4">
                   <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-300"></div>

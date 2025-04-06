@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal"; // 👈 use the external modal
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,8 +12,11 @@ const Register = () => {
     levelOfStudy: "",
     affiliation: "",
   });
+
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [redirectAfterClose, setRedirectAfterClose] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,22 +27,24 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      setModalMessage("Password must be at least 6 characters.");
+      setModalOpen(true);
       setLoading(false);
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
+      setModalMessage("Passwords do not match.");
+      setModalOpen(true);
       setLoading(false);
       return;
     }
 
     if (!/^[0-9]{1,2}$/.test(formData.age)) {
-      setError("Age must be a whole number with at most 2 digits.");
+      setModalMessage("Age must be a whole number with at most 2 digits.");
+      setModalOpen(true);
       setLoading(false);
       return;
     }
@@ -65,29 +71,49 @@ const Register = () => {
 
       try {
         data = JSON.parse(text);
-      } catch (parseError) {
+      } catch {
         data = { message: text };
       }
 
       if (response.ok) {
-        alert("Registration Successful! You can now log in.");
-        navigate("/login");
+        setModalMessage("Registration Successful! You can now log in.");
+        setRedirectAfterClose(true);
       } else {
-        setError("Registration Failed: " + (data.message || text));
+        setModalMessage("Registration Failed: " + (data.message || text));
       }
     } catch (error) {
       console.error("Error registering:", error);
-      setError("An error occurred. Please try again.");
+      setModalMessage("An error occurred. Please try again.");
     } finally {
+      setModalOpen(true);
       setLoading(false);
+    }
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (redirectAfterClose) {
+      setRedirectAfterClose(false);
+      navigate("/login");
     }
   };
 
   return (
     <div className="bg-animated-gradient flex justify-center items-center min-h-screen">
+      {/* ✅ Using external Modal */}
+      <Modal
+        isOpen={modalOpen}
+        title="Notice"
+        message={modalMessage}
+        onConfirm={handleModalClose}
+        onCancel={handleModalClose}
+        confirmText="OK"
+        cancelText=""
+      />
+
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
         <form onSubmit={handleRegister}>
           <input
             type="email"
@@ -168,7 +194,7 @@ const Register = () => {
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
-        {/* Links for navigation */}
+
         <div className="mt-4 text-center">
           <p className="text-sm">
             Already have an account?{" "}

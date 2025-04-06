@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal"; // Adjust path if needed
 
 const videoSources = [
   { src: "/videos/Male_Agent.mp4", id: 1 },
@@ -29,13 +29,17 @@ const RankingPage = ({ unlockReports }) => {
   const [currentAttributeIndex, setCurrentAttributeIndex] = useState(0);
   const [rankings, setRankings] = useState({});
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [redirectAfterModal, setRedirectAfterModal] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
-      alert("You must be logged in to access this page.");
-      navigate("/login");
+      setModalMessage("You must be logged in to access this page.");
+      setModalOpen(true);
+      setRedirectAfterModal(() => () => navigate("/login"));
     } else {
       setRandomizedVideos([...videoSources].sort(() => Math.random() - 0.5));
       setRandomizedAttributes([...attributes].sort(() => Math.random() - 0.5));
@@ -49,13 +53,15 @@ const RankingPage = ({ unlockReports }) => {
   const isRankingValid = () => {
     const ranks = Object.values(rankings);
     if (ranks.length < randomizedVideos.length || ranks.includes(NaN) || ranks.includes("")) {
-      alert("Please provide a unique ranking (1, 2, or 3) for each agent before submitting.");
+      setModalMessage("Please provide a unique ranking (1, 2, or 3) for each agent before submitting.");
+      setModalOpen(true);
       return false;
     }
 
     const uniqueRanks = new Set(ranks);
     if (ranks.length !== uniqueRanks.size || !ranks.every((rank) => rank >= 1 && rank <= 3)) {
-      alert("Each agent must receive a unique rank (1, 2, or 3). Please review your rankings.");
+      setModalMessage("Each agent must receive a unique rank (1, 2, or 3). Please review your rankings.");
+      setModalOpen(true);
       return false;
     }
 
@@ -65,6 +71,14 @@ const RankingPage = ({ unlockReports }) => {
   const handleRankingChange = (agentId, ranking) => {
     const newRankings = { ...rankings, [agentId]: parseInt(ranking) };
     setRankings(newRankings);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (redirectAfterModal) {
+      redirectAfterModal();
+      setRedirectAfterModal(null);
+    }
   };
 
   const submitRanking = async () => {
@@ -98,19 +112,20 @@ const RankingPage = ({ unlockReports }) => {
         setCurrentAttributeIndex(currentAttributeIndex + 1);
         setRankings({});
       } else {
-        alert("Ranking completed!");
-
-         // Unlock Reports page here
         localStorage.setItem("reportsUnlocked", "true");
         if (typeof unlockReports === "function") {
           unlockReports();
         }
-        localStorage.removeItem("rankingUnlocked"); // Lock the page again
-        window.location.reload(); // Reload the page to enforce the lock
+        localStorage.removeItem("rankingUnlocked");
+
+        setModalMessage("Ranking completed!");
+        setRedirectAfterModal(() => () => window.location.reload());
+        setModalOpen(true);
       }
     } catch (error) {
       console.error("Error saving ranking:", error);
-      alert("An error occurred while submitting. Please try again.");
+      setModalMessage("An error occurred while submitting. Please try again.");
+      setModalOpen(true);
     } finally {
       setLoading(false);
     }
@@ -118,9 +133,25 @@ const RankingPage = ({ unlockReports }) => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+      <Modal
+        isOpen={modalOpen}
+        title="Notice"
+        message={modalMessage}
+        onConfirm={handleModalClose}
+        onCancel={handleModalClose}
+        confirmText="OK"
+        cancelText=""
+      />
+
       <h2 className="text-2xl font-bold mb-4">Step 2: Rank Agents on Attributes</h2>
-      <h3 className="text-lg font-semibold mb-2">Attribute: {randomizedAttributes[currentAttributeIndex]?.name}</h3>
-      <p className="mb-4">Category: {randomizedAttributes[currentAttributeIndex]?.category}</p>
+
+      <h3 className="alert">
+        Attribute: {randomizedAttributes[currentAttributeIndex]?.name}
+      </h3>
+
+      <p className="mb-4">
+        Category: {randomizedAttributes[currentAttributeIndex]?.category}
+      </p>
 
       <div className="flex justify-center gap-6">
         {randomizedVideos.map((video) => (
@@ -140,11 +171,18 @@ const RankingPage = ({ unlockReports }) => {
           </div>
         ))}
       </div>
+
       <button
         onClick={submitRanking}
-        className={`mt-5 px-6 py-3 rounded-lg shadow-md ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"}`}
+        className={`mt-5 px-6 py-3 rounded-lg shadow-md ${
+          loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"
+        }`}
       >
-        {loading ? "Submitting..." : currentAttributeIndex < randomizedAttributes.length - 1 ? "Next Attribute" : "Finish"}
+        {loading
+          ? "Submitting..."
+          : currentAttributeIndex < randomizedAttributes.length - 1
+          ? "Next Attribute"
+          : "Finish"}
       </button>
     </div>
   );

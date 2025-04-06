@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../components/Modal"; // Adjust path as needed
 
 const videoSources = [
   { src: "/videos/Male_Agent.mp4", id: 1 },
@@ -13,17 +14,29 @@ const RankingGender = ({ unlockRanking }) => {
   const [randomizedVideos, setRandomizedVideos] = useState([]);
   const [genderSelections, setGenderSelections] = useState({});
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [redirectToDashboard, setRedirectToDashboard] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token) {
-      alert("You must be logged in to access this page.");
-      navigate("/login");
+      setModalMessage("You must be logged in to access this page.");
+      setModalOpen(true);
+      setRedirectToDashboard(true); // Will go to login
     } else {
       setRandomizedVideos([...videoSources].sort(() => Math.random() - 0.5));
     }
   }, [navigate]);
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    if (redirectToDashboard) {
+      setRedirectToDashboard(false);
+      navigate("/login");
+    }
+  };
 
   const handleGenderSelection = (videoId, gender, agentName) => {
     setGenderSelections({ ...genderSelections, [videoId]: { agentName, gender } });
@@ -40,7 +53,8 @@ const RankingGender = ({ unlockRanking }) => {
 
   const submitGenders = async () => {
     if (!isSelectionValid()) {
-      alert("Each agent must have a unique gender selection. Please adjust your choices.");
+      setModalMessage("Each agent must have a unique gender selection. Please adjust your choices.");
+      setModalOpen(true);
       return;
     }
 
@@ -67,14 +81,15 @@ const RankingGender = ({ unlockRanking }) => {
 
       // Unlock ranking and remove access to gender identification
       localStorage.setItem("rankingUnlocked", "true");
-      localStorage.removeItem("genderIdentificationUnlocked"); // Disable access to this page
-      unlockRanking(); // Update state in Dashboard
-
-      alert("Gender identification submitted successfully!");
-      navigate("/dashboard"); // Redirect to dashboard after submission
+      localStorage.removeItem("genderIdentificationUnlocked");
+      unlockRanking();
+      setModalMessage("Gender identification submitted successfully!");
+      setRedirectToDashboard(true);
+      setModalOpen(true);
     } catch (error) {
       console.error("Error saving gender responses:", error);
-      alert("An error occurred while submitting. Please try again.");
+      setModalMessage("An error occurred while submitting. Please try again.");
+      setModalOpen(true);
     } finally {
       setLoading(false);
     }
@@ -82,6 +97,16 @@ const RankingGender = ({ unlockRanking }) => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+      <Modal
+        isOpen={modalOpen}
+        title="Notice"
+        message={modalMessage}
+        onConfirm={handleModalClose}
+        onCancel={handleModalClose}
+        confirmText="OK"
+        cancelText=""
+      />
+
       <div className="w-full max-w-4xl text-center">
         <h2 className="text-2xl font-bold mb-4">Identify Agent Genders</h2>
         <div className="flex justify-center gap-6">

@@ -31,7 +31,10 @@ const DashboardContent = () => {
       {/* Alert Box */}
       <div className="alert bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-md animate-pulse">
         <p className="font-semibold">
-          Please note that immediately you click on "Watch Videos" from the left menu, the three agents' videos will start playing one after the other. Then, you will have the link to rate the agents. You can only watch the three videos once, even if you log out and log in again. Please click on "Watch Videos" when you are ready to begin the experiment. Thank you.
+          ⚠️ Important:
+          Once you click "Watch Videos", the 3 agent videos will autoplay one time only.
+          You must complete the gender and ranking steps right after.
+          Don't start until you're ready.
         </p>
       </div>
 
