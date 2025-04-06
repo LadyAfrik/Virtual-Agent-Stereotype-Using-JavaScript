@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ranking Analysis</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #eaf2f8;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        .hypothesis-card {
+            background-color: #eaf2f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Ranking Analysis</h1>
+
+<!-- Kruskal-Wallis Test Hypotheses -->
+<div class="section">
+    <h2>Kruskal-Wallis Test (Between-Participants)</h2>
+    <div class="hypothesis-card">
+        <h3>Null Hypothesis (H₀):</h3>
+        <p>There is no significant difference in the rankings between Male, Female, and Others participants.</p>
+        <p><strong>Formally:</strong> The distributions of rankings for Male, Female, and Others participants are the same (no difference in how these groups rank the agents).</p>
+    </div>
+    <div class="hypothesis-card">
+        <h3>Alternative Hypothesis (H₁):</h3>
+        <p>There is a significant difference in the rankings between at least one of the participant groups (Male, Female, Others).</p>
+        <p><strong>Formally:</strong> The distribution of rankings for at least one group (Male, Female, or Others) differs significantly from the others.</p>
+    </div>
+</div>
+
+<!-- Kruskal-Wallis Test Results Section -->
+<div class="section">
+    <h2>Kruskal-Wallis Test Results</h2>
+    <p><strong>Test Statistic:</strong> {{ test_results_kw.test_statistic }}</p>
+    <p><strong>P-value:</strong> {{ test_results_kw.p_value }}</p>
+    <h3>Interpretation</h3>
+    <p>{{ interpretation_kw }}</p>
+</div>
+
+<!-- Friedman Test Hypotheses -->
+<div class="section">
+    <h2>Friedman Test (For Related/Within-Subjects Groups)</h2>
+    <div class="hypothesis-card">
+        <h3>Null Hypothesis (H₀):</h3>
+        <p>There is no difference in the rankings across the Male, Female, and Androgynous agents.</p>
+        <p><strong>Formally:</strong> The distributions of rankings are the same across all conditions (Male, Female, Androgynous agents).</p>
+    </div>
+    <div class="hypothesis-card">
+        <h3>Alternative Hypothesis (H₁):</h3>
+        <p>There is a significant difference in the rankings between at least one pair of agents (Male, Female, Androgynous).</p>
+        <p><strong>Formally:</strong> At least one of the conditions (Male, Female, or Androgynous agents) has a different distribution of rankings compared to the others.</p>
+    </div>
+</div>
+
+<!-- Friedman Test Results Section -->
+<div class="section">
+    <h2>Friedman Test Results</h2>
+    <p><strong>Test Statistic:</strong> {{ test_results_friedman.test_statistic }}</p>
+    <p><strong>P-value:</strong> {{ test_results_friedman.p_value }}</p>
+    <h3>Interpretation</h3>
+    <p>{{ interpretation_friedman }}</p>
+</div>
+
+<!-- Ranking Data Section -->
+<div class="section">
+    <h2>Ranking Data</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>User Email</th>
+            <th>Gender</th>
+            <th>Agent Name</th>
+            <th>Attribute</th>
+            <th>Ranking</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in ranking_data %}
+        <tr>
+            <td>{{ row.user_email }}</td>
+            <td>{{ row.gender }}</td>
+            <td>{{ row.agent_name }}</td>
+            <td>{{ row.attribute }}</td>
+            <td>{{ row.ranking }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

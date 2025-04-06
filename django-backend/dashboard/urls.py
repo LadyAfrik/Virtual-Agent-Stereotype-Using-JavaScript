@@ -8,6 +8,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard_page, name='dashboard_page'),
     path('users/', UsersAPIView.as_view(), name='users'),
     path('gender-selections/', GenderSelectionAPIView.as_view(), name='gender_selections'),
+    path('ranking-analysis/', views.ranking_analysis_view, name='ranking_analysis'),
 ]
 
 

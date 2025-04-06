@@ -15,6 +15,10 @@ const Dashboard = () => {
   const [reportsUnlocked, setReportsUnlocked] = useState(
       localStorage.getItem("reportsUnlocked") === "true"
   );
+  const [rankingAnalysisUnlocked, setRankingAnalysisUnlocked] = useState(
+    localStorage.getItem("rankingAnalysisUnlocked") === "true"
+  );
+
   const userEmail = localStorage.getItem("userEmail");
 
   useEffect(() => {
@@ -27,6 +31,7 @@ const Dashboard = () => {
     setGenderIdentificationUnlocked(localStorage.getItem("genderIdentificationUnlocked") === "true");
     setRankingUnlocked(localStorage.getItem("rankingUnlocked") === "true");
     setReportsUnlocked(localStorage.getItem("reportsUnlocked") === "true");
+    setRankingAnalysisUnlocked(localStorage.getItem("rankingAnalysisUnlocked") === "true");
   }, []);
 
   const handleLogout = () => {
@@ -51,6 +56,7 @@ const Dashboard = () => {
 
   const unlockReports = () => {
       localStorage.setItem("reportsUnlocked", "true");
+      localStorage.setItem("rankingAnalysisUnlocked", "true"); // Unlock Ranking Analysis
       setReportsUnlocked(true);
   };
 
@@ -67,6 +73,15 @@ const Dashboard = () => {
                   title="Reports"
                 ></iframe>
               );
+      case "rankingAnalysis":
+            // Embed the Ranking Analysis page
+            return (
+              <iframe
+                src="http://127.0.0.1:8000/dashboard/ranking-analysis/"
+                style={{ width: "100%", height: "100%", border: "none", overflow: "auto" }}
+                title="Ranking Analysis"
+              ></iframe>
+            );
       case "videos":
         return <VideoPage unlockGenderIdentification={unlockGenderIdentification} />;
       case "ranking":
@@ -111,6 +126,9 @@ const Dashboard = () => {
             </li>
             <li className={`p-3 ${reportsUnlocked ? "cursor-pointer hover:bg-blue-600" : "opacity-50 cursor-not-allowed"}`} onClick={() => reportsUnlocked && setActivePage("reports")}>
                 📊 Reports
+            </li>
+            <li className={`p-3 ${reportsUnlocked ? "cursor-pointer hover:bg-blue-600" : "opacity-50 cursor-not-allowed"}`} onClick={() => reportsUnlocked && setActivePage("rankingAnalysis")}>
+                📊 Ranking Analysis
             </li>
             <li className="p-3 cursor-pointer rounded hover:bg-red-600 transition-transform transform hover:scale-105" onClick={handleLogout}>🚪 Logout</li>
           </ul>

@@ -30,6 +30,10 @@ ALLOWED_HOSTS = []
 APPEND_SLASH = True
 
 
+from decouple import config
+
+OPENAI_API_KEY = config('OPENAI_API_KEY')  # Load the key from the .env file
+
 
 # Application definition
 

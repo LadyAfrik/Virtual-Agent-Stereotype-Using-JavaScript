@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
 from .models import AttributeRanking, Users, GenderSelection
+from .utils import fetch_ranking_data, perform_stat_test, interpret_findings, perform_friedman_test
 from django.db.models import Count, Avg, StdDev, Min, Max
 from .serializers import (
     AttributeRankingSerializer,
@@ -106,6 +107,34 @@ def dashboard_page(request):
     }
 
     return render(request, 'dashboard/dashboard.html', context)
+
+
+
+def ranking_analysis_view(request):
+    # Fetch data and run both tests
+    ranking_data = fetch_ranking_data()
+
+    # Perform the Kruskal-Wallis test (already done in perform_stat_test)
+    test_results_kw = perform_stat_test()
+
+    # Perform the Friedman test
+    test_results_friedman = perform_friedman_test(ranking_data)
+
+    # Generate interpretation using LLM for both tests
+    interpretation_kw = interpret_findings(test_results_kw)
+    interpretation_friedman = interpret_findings(test_results_friedman)
+
+    # Pass the data and test results to the template
+    context = {
+        'ranking_data': ranking_data[:10],  # Show the first 10 rows
+        'test_results_kw': test_results_kw,
+        'test_results_friedman': test_results_friedman,  # Add Friedman results
+        'interpretation_kw': interpretation_kw,
+        'interpretation_friedman': interpretation_friedman,  # Add Friedman interpretation
+    }
+    return render(request, 'dashboard/statistical_analysis.html', context)
+
+
 
 # --- API Views ---
 
