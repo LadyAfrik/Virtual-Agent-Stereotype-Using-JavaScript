@@ -1,19 +1,44 @@
-/* General Styles */
+/* ====== TOGGLE STYLES ====== */
+/* Show menu when menu toggle is checked */
 #menu-toggle:checked + #menu {
   display: block;
 }
 
+/* Show dropdown when dropdown toggle is checked */
 #dropdown-toggle:checked + #dropdown {
   display: block;
 }
 
-/* Link and Arrow Effects */
+
+/* ====== BACKGROUND ANIMATION ====== */
+/* Define keyframes for slow background panning */
+@keyframes panBackground {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-2%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Apply pan animation to any element with this class */
+.animate-pan {
+  animation: panBackground 30s ease-in-out infinite;
+}
+
+
+/* ====== LINK & ARROW HOVER EFFECTS ====== */
+/* Basic transition effects for links and spans */
 a, span {
   position: relative;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
+/* Arrow link styling with flex layout */
 a.arrow, span.arrow {
   display: flex;
   align-items: center;
@@ -21,16 +46,19 @@ a.arrow, span.arrow {
   line-height: 1.5;
 }
 
+/* Arrow icon positioning */
 a.arrow .arrow_icon, span.arrow .arrow_icon {
   position: relative;
   margin-left: 0.5em;
 }
 
+/* Transition effect for arrow SVG on hover */
 a.arrow .arrow_icon svg, span.arrow .arrow_icon svg {
   transition: transform 0.3s 0.02s ease;
   margin-right: 1em;
 }
 
+/* Arrow underline bar effect */
 a.arrow .arrow_icon::before, span.arrow .arrow_icon::before {
   content: "";
   display: block;
@@ -44,35 +72,36 @@ a.arrow .arrow_icon::before, span.arrow .arrow_icon::before {
   transition: width 0.3s ease;
 }
 
+/* Expand underline and move arrow icon on hover */
 a.arrow:hover .arrow_icon::before, span.arrow:hover .arrow_icon::before {
   width: 1em;
 }
-
 a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   transform: translateX(0.75em);
 }
 
-/* Gradient Background */
+
+/* ====== GRADIENT BACKGROUND UTIL ====== */
+/* Blue to teal linear gradient background */
 .bg-blue-teal-gradient {
   background: linear-gradient(90deg, rgba(49, 130, 206, 1) 0%, rgba(56, 178, 172, 1) 100%);
 }
 
 
-
-/* General Styles */
-
+/* ====== GENERAL APP STYLES ====== */
 .app-container {
   font-family: 'Arial', sans-serif;
   color: #333;
 }
 
-/* Navbar Styles */
+
+/* ====== NAVBAR STYLES ====== */
 .navbar {
   background-color: #333;
   padding: 10px;
   display: flex;
   justify-content: center;
-  gap: 20px; /* Adjust spacing */
+  gap: 20px;
   align-items: center;
   position: fixed;
   top: 0;
@@ -81,11 +110,13 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   z-index: 1000;
 }
 
+/* Navigation menu layout */
 .navbar .menu {
   display: flex;
   gap: 15px;
 }
 
+/* Nav link styling */
 .nav-link {
   color: #61dafb;
   text-decoration: none;
@@ -97,13 +128,13 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   text-decoration: underline;
 }
 
-/* Active Page Highlight */
+/* Active link highlight */
 .active-link {
   color: #ffcc00 !important;
   text-decoration: underline;
 }
 
-/* Hamburger Menu for Mobile */
+/* Hamburger button for mobile */
 .hamburger {
   display: none;
   font-size: 1.5rem;
@@ -113,6 +144,7 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   cursor: pointer;
 }
 
+/* Responsive behavior for smaller screens */
 @media (max-width: 768px) {
   .navbar .menu {
     display: none;
@@ -135,7 +167,7 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
 }
 
 
-/* Landing Page Styles */
+/* ====== LANDING PAGE STYLES ====== */
 .landing-container {
   color: white;
   padding: 50px 20px;
@@ -145,9 +177,10 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative; /* Ensure the blur applies only to the background */
+  position: relative;
 }
 
+/* Background blur effect for landing page */
 .landing-container::before {
   content: '';
   position: absolute;
@@ -158,54 +191,60 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   background-image: url('../public/Background.jpg');
   background-size: cover;
   background-position: center;
-  filter: blur(4px); /* Apply the blur effect */
-  z-index: -1; /* Place the blur behind the content */
+  filter: blur(4px);
+  z-index: -1;
 }
 
+/* Landing page heading styling */
 .landing-container h1 {
   font-size: 1.5rem;
   margin-bottom: 20px;
-  font-weight: bold; /* Makes the text bolder */
-  letter-spacing: 2px; /* Adds space between the letters */
-  color: white; /* Keeps the text color white */
-  text-transform: uppercase; /* Makes text uppercase */
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Adds a more pronounced shadow */
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
 }
 
+/* Paragraph styling on landing */
 .landing-container p {
   font-size: 1.2rem;
   margin-bottom: 20px;
 }
 
+/* Introductory animated text */
 .intro-text {
   font-size: 1.5rem;
-  font-weight: bold; /* Make the text bolder */
-  letter-spacing: 1px; /* Adds space between the letters */
-  color: #61dafb; /* Keeps the text blue */
-  text-align: center; /* Centers the text */
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Adds shadow to make the text stand out */
-  -webkit-text-stroke: 0.5px white; /* Adds a white border around the text */
-  animation: blink-animation 1.5s steps(5, start) infinite; /* Blinking effect */
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #61dafb;
+  text-align: center;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.5px white;
+  animation: blink-animation 1.5s steps(5, start) infinite;
 }
 
-/* Blinking animation */
+/* Blinking effect keyframes */
 @keyframes blink-animation {
   50% {
     opacity: 0;
   }
 }
 
-/* Stop blinking when mouse is over the text */
+/* Stop blinking on hover */
 .intro-text:hover {
-  animation: none; /* Stops the blinking effect */
-  opacity: 1; /* Ensures the text is fully visible */
+  animation: none;
+  opacity: 1;
 }
 
+
+/* ====== AGENT SECTION ====== */
 .agent-intro h2 {
   font-size: 2rem;
   margin-bottom: 10px;
 }
 
+/* Agent button style */
 .agent-button {
   background-color: #61dafb;
   color: #333;
@@ -221,118 +260,112 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   background-color: #4e73df;
 }
 
-/* Course Info and Call to Action */
+
+/* ====== COURSE INFO / CALL TO ACTION ====== */
 .course-info {
   margin-top: 40px;
 }
 
+/* CTA button with detailed content */
 .cta-button {
   background-color: #61dafb;
   color: #333;
-  width: 50%; /* Adjust width */
-  height: auto; /* Allow the height to grow based on content */
+  width: 50%;
+  height: auto;
   font-size: 1.2rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  display: block; /* Makes the div a block element */
-  margin-top: 10px; /* Adds some spacing above */
-  padding: 20px; /* Adds padding for vertical space inside the button */
-  text-align: justify; /* Align text to the left */
-  box-sizing: border-box; /* Ensures padding is included in the total width and height */
-  margin-left: auto; /* Automatically adjust the left margin */
-  margin-right: auto; /* Automatically adjust the right margin */
+  display: block;
+  margin-top: 10px;
+  padding: 20px;
+  text-align: justify;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+/* List styling inside CTA button */
 .cta-button ol {
-  padding-left: 20px; /* Adds some space for bullet points */
+  padding-left: 20px;
 }
 
 .cta-button li {
-  margin-bottom: 10px; /* Adds spacing between bullet points */
+  margin-bottom: 10px;
 }
 
-/* Ensure Login and Register inside CTA are black */
+/* Login/Register links inside CTA remain black */
 .cta-button .nav-link {
-  color: black; /* Ensure Register and Login inside CTA button remain black */
+  color: black;
   font-weight: bold;
   text-decoration: none;
 }
 
 .cta-button .nav-link:hover {
-  color: #61dafb; /* Change color to blue on hover */
+  color: #61dafb;
 }
 
-/* Hover effect for CTA button */
+/* CTA hover effect */
 .cta-button:hover {
-  background-color: #4e73df; /* Change background color on hover */
+  background-color: #4e73df;
 }
 
-/* Add pointer arrow icon before each list item */
+/* Pointer icon for bullet list */
 .pointer-icon {
-  width: 20px; /* Adjust size */
-  height: 20px; /* Adjust size */
-  vertical-align: middle; /* Aligns the image with the text */
-  margin-right: 10px; /* Adds space between the image and the text */
-  display: inline-block; /* Ensures the image is displayed on the same line as text */
-  animation: blink-animation 1.5s infinite; /* Apply blinking effect */
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 10px;
+  display: inline-block;
+  animation: blink-animation 1.5s infinite;
 }
 
-/* Define the blinking animation */
-@keyframes blink-animation {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-/* Scrolling Text Container */
+
+/* ====== SCROLLING TEXT STYLES ====== */
+/* Scrolling text container setup */
 .scrolling-text {
-  width: 100%; /* Full width of the container */
-  overflow: hidden; /* Hide text when it overflows */
-  position: relative; /* Ensure the text can move inside this container */
-  padding: 10px 0; /* Padding to add some space around */
-  margin-top: 10px; /* Space above the scrolling text */
-  text-align: center; /* Align the text in the center */
-  height: 40px; /* Adjust the height to fit the text properly */
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 10px 0;
+  margin-top: 10px;
+  text-align: center;
+  height: 40px;
 }
 
-/* Scrolling Text Content */
+/* Animated scrolling text */
 .scrolling-text p {
   position: absolute;
-  white-space: nowrap; /* Prevent text from wrapping to the next line */
-  animation: scroll-left 15s linear infinite; /* Slow speed for scrolling */
+  white-space: nowrap;
+  animation: scroll-left 15s linear infinite;
   font-size: 1.2rem;
-  color: #f0f0f0; /* Light color for the text */
+  color: #f0f0f0;
   margin: 0;
-  padding-left: 100%; /* Start from the far right */
+  padding-left: 100%;
   font-weight: bold;
-  line-height: 40px; /* Ensure the text stays vertically centered */
+  line-height: 40px;
 }
 
-/* Scrolling animation */
+/* Scrolling animation keyframes */
 @keyframes scroll-left {
   0% {
-    transform: translateX(100%); /* Start from the right side of the screen */
+    transform: translateX(100%);
   }
   100% {
-    transform: translateX(-100%); /* End at the left side, off-screen */
+    transform: translateX(-100%);
   }
 }
 
-/* Hover effect to stop animation and change text size */
+/* Pause scroll and enlarge text on hover */
 .scrolling-text:hover p {
-  animation-play-state: paused; /* Pause scrolling on hover */
-  font-size: 1.5rem; /* Increase font size when hovered */
-  transition: font-size 0.3s ease; /* Smooth transition for font size change */
+  animation-play-state: paused;
+  font-size: 1.5rem;
+  transition: font-size 0.3s ease;
 }
 
 
-/* Red Blinking Alert */
+/* ====== ALERT BOX ====== */
+/* Red blinking alert box */
 .alert {
   background-color: red;
   color: white;
@@ -344,18 +377,21 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   animation: blink 3s step-start 0s infinite;
 }
 
-/* Blinking animation */
+/* Keyframes for alert blinking */
 @keyframes blink {
   50% {
     opacity: 0;
   }
 }
 
-/* Pause blinking when mouse is over */
+/* Pause alert blinking on hover */
 .alert:hover {
   animation-play-state: paused;
 }
 
+
+/* ====== ANIMATED GRADIENT BACKGROUND ====== */
+/* Animated gradient keyframes */
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;
@@ -368,13 +404,17 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   }
 }
 
+/* Apply animated gradient background */
 .bg-animated-gradient {
   background: linear-gradient(135deg, #1d4ed8, #2563eb, #3b82f6, #60a5fa, #93c5fd);
   background-size: 400% 400%;
   animation: gradientAnimation 15s ease infinite;
-  height: 100vh; /* Full screen */
+  height: 100vh;
 }
 
+
+/* ====== BOUNCE ANIMATION ====== */
+/* Bouncing animation for attention */
 @keyframes bounce {
   0%, 100% {
     transform: translateY(0);
@@ -384,7 +424,7 @@ a.arrow:hover .arrow_icon svg, span.arrow:hover .arrow_icon svg {
   }
 }
 
+/* Apply bounce animation */
 .animate-bounce {
   animation: bounce 1s infinite;
 }
-

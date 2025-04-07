@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; // Import React and necessary hooks
 
+// ✅ List of agent videos
 const videoSources = [
   "/videos/Male_Agent.mp4",
   "/videos/Female_Agent.mp4",
@@ -8,12 +9,15 @@ const videoSources = [
 
 const VideoPage = ({ unlockGenderIdentification }) => {
   const userEmail = localStorage.getItem("userEmail");
+
+  // ✅ State declarations
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [videosWatched, setVideosWatched] = useState(0);
   const [genderUnlocked, setGenderUnlocked] = useState(
     localStorage.getItem("genderIdentificationUnlocked") === "true"
   );
 
+  // ✅ On mount: verify login and fetch video progress
   useEffect(() => {
     if (!userEmail) {
       window.location.href = "http://localhost:3000/login";
@@ -22,6 +26,7 @@ const VideoPage = ({ unlockGenderIdentification }) => {
     fetchProgress();
   }, []);
 
+  // ✅ Fetch user's last video progress from backend
   const fetchProgress = async () => {
     try {
       const token = localStorage.getItem("authToken");
@@ -32,7 +37,10 @@ const VideoPage = ({ unlockGenderIdentification }) => {
 
       const response = await fetch(`http://localhost:8080/api/users/check-progress/${userEmail}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) throw new Error("Failed to fetch progress");
@@ -45,6 +53,7 @@ const VideoPage = ({ unlockGenderIdentification }) => {
     }
   };
 
+  // ✅ Handle video end: go to next video or unlock next step
   const handleVideoEnd = async () => {
     setCurrentVideoIndex((prevIndex) => {
       const nextIndex = prevIndex + 1;
@@ -52,6 +61,7 @@ const VideoPage = ({ unlockGenderIdentification }) => {
       return nextIndex;
     });
 
+    // ✅ All videos watched — unlock Gender Identification
     if (currentVideoIndex + 1 >= videoSources.length) {
       setVideosWatched(1);
       localStorage.setItem("genderIdentificationUnlocked", "true");
@@ -60,12 +70,16 @@ const VideoPage = ({ unlockGenderIdentification }) => {
     }
   };
 
+  // ✅ Save progress to backend
   const saveProgress = async (index) => {
     try {
       const token = localStorage.getItem("authToken");
       await fetch("http://localhost:8080/api/users/update-video-progress", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           email: userEmail,
           lastWatchedVideo: index,
@@ -77,12 +91,16 @@ const VideoPage = ({ unlockGenderIdentification }) => {
     }
   };
 
+  // ✅ Restart the study by resetting progress in backend and localStorage
   const resetProgress = async () => {
     try {
       const token = localStorage.getItem("authToken");
       await fetch("http://localhost:8080/api/users/restart-videos", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ email: userEmail }),
       });
 
@@ -97,6 +115,7 @@ const VideoPage = ({ unlockGenderIdentification }) => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-white px-4">
+      {/* 🎥 Video Player */}
       <div className="w-full max-w-2xl">
         <video
           key={currentVideoIndex}
@@ -108,6 +127,7 @@ const VideoPage = ({ unlockGenderIdentification }) => {
         />
       </div>
 
+      {/* 🔁 Restart Button or Completion Messages */}
       {videosWatched === 0 ? (
         <button
           onClick={resetProgress}
@@ -117,13 +137,12 @@ const VideoPage = ({ unlockGenderIdentification }) => {
         </button>
       ) : genderUnlocked ? (
         <p className="mt-5 text-sm font-semibold text-gray-700">
-          Proceed to <b>Gender Identification</b> by clicking <b>"Gender Identification"</b> in the left menu.
+          ✅ You may now proceed to <b>Gender Identification</b> by clicking it in the left menu.
         </p>
       ) : (
         <p className="mt-5 text-sm font-semibold text-gray-700">
-          Thank you for participating in our study. The videos are no longer available, as you have already completed the study. Additionally, the ranking pages are inaccessible since each participant can only take the study once.
+          🛑 You have completed the video session. The study is limited to one attempt per participant.
         </p>
-
       )}
     </div>
   );

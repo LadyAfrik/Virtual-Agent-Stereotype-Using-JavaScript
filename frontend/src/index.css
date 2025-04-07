@@ -1,3 +1,8 @@
+/* Import the base styles from Tailwind CSS, which includes global resets and defaults for consistent styling across browsers */
 @tailwind base;
+
+/* Import component-specific styles from Tailwind CSS. This includes predefined component classes for reusable UI elements like buttons, cards, etc. */
 @tailwind components;
+
+/* Import utility classes from Tailwind CSS. These are individual classes like padding, margin, text alignment, etc., which are used to style elements directly in your HTML or JSX. */
 @tailwind utilities;

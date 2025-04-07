@@ -1,3 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@tailwind base; /* Import base styles: Includes default styling such as reset rules, global styles, etc. */
+@tailwind components; /* Import component styles: Includes reusable styles for UI components (e.g., buttons, cards, modals). */
+@tailwind utilities; /* Import utility classes: Includes utility-first classes for layout, spacing, typography, colors, etc. */
