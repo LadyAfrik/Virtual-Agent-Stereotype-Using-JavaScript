@@ -321,11 +321,11 @@ Do not commit sensitive information (API keys, passwords, etc.) to version contr
 
 - ** Django Tests:** Execute:
   ```bash
- python manage.py test 
+  python manage.py test 
  
 - **Spring Boot Tests:** Run using Maven: 
   ```bash 
- mvn test
+  mvn test
 
 
 
