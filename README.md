@@ -319,12 +319,12 @@ Do not commit sensitive information (API keys, passwords, etc.) to version contr
 
 
 
-## Django Tests: Execute:
-```bash
+- ** Django Tests:** Execute:
+  ```bash
  python manage.py test 
  
- ## Spring Boot Tests: Run using Maven: 
- ```bash 
+- **Spring Boot Tests:** Run using Maven: 
+  ```bash 
  mvn test
 
 
