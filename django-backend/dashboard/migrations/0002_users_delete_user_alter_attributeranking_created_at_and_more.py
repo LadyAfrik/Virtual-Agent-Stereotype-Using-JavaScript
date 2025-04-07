@@ -6,59 +6,88 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
+    # This migration depends on the initial migration of the 'dashboard' app (0001_initial).
     dependencies = [
         ('dashboard', '0001_initial'),
     ]
 
     operations = [
+        # Create the 'Users' model to store user information (replacing the previous 'User' model)
         migrations.CreateModel(
             name='Users',
             fields=[
+                # 'id' is an automatically generated primary key field
                 ('id', models.AutoField(primary_key=True, serialize=False)),
+                # 'email' stores the user's unique email
                 ('email', models.CharField(max_length=255)),
+                # 'gender' stores the user's gender
                 ('gender', models.CharField(max_length=50)),
+                # 'age' stores the user's age
                 ('age', models.IntegerField()),
+                # 'level_of_study' stores the user's level of education or study
                 ('level_of_study', models.CharField(max_length=100)),
+                # 'affiliation' stores the user's organization or institution
                 ('affiliation', models.CharField(max_length=100)),
+                # 'password' stores the user's password (hashed or plain)
                 ('password', models.CharField(max_length=255)),
+                # 'watched_the_videos' is a boolean indicating whether the user has watched certain videos
                 ('watched_the_videos', models.BooleanField(default=False)),
+                # 'last_watched_video' stores the name of the last video the user watched, if any
                 ('last_watched_video', models.CharField(max_length=255, null=True)),
             ],
             options={
+                # Specify the database table name for this model
                 'db_table': 'users',
             },
         ),
+
+        # Delete the old 'User' model (renamed or replaced by 'Users')
         migrations.DeleteModel(
             name='User',
         ),
+
+        # Modify the 'created_at' field in the 'AttributeRanking' model to remove auto_now_add
         migrations.AlterField(
             model_name='attributeranking',
             name='created_at',
             field=models.DateTimeField(),
         ),
+
+        # Change the 'id' field in the 'AttributeRanking' model to an AutoField (primary key)
         migrations.AlterField(
             model_name='attributeranking',
             name='id',
             field=models.AutoField(primary_key=True, serialize=False),
         ),
+
+        # Modify the 'created_at' field in the 'GenderSelection' model to remove auto_now_add
         migrations.AlterField(
             model_name='genderselection',
             name='created_at',
             field=models.DateTimeField(),
         ),
+
+        # Change the 'id' field in the 'GenderSelection' model to an AutoField (primary key)
         migrations.AlterField(
             model_name='genderselection',
             name='id',
             field=models.AutoField(primary_key=True, serialize=False),
         ),
+
+        # Change the database table name for 'AttributeRanking' to 'attribute_rankings'
         migrations.AlterModelTable(
             name='attributeranking',
             table='attribute_rankings',
         ),
+
+        # Change the database table name for 'GenderSelection' to 'gender_selections'
         migrations.AlterModelTable(
             name='genderselection',
             table='gender_selections',
         ),
+
+        # Modify the 'user_email' field in the 'AttributeRanking' model to use a foreign key reference
+        # to the newly created 'Users' model
         migrations.AlterField(
             model_name='attributeranking',
             name='user_email',

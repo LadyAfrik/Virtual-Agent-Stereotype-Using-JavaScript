@@ -4,46 +4,73 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
+    # This migration is marked as the initial migration for the app.
     initial = True
 
+    # Dependencies for this migration. This one has no dependencies on other migrations.
     dependencies = [
     ]
 
     operations = [
+        # Create the 'AttributeRanking' model to store ranking information
         migrations.CreateModel(
             name='AttributeRanking',
             fields=[
+                # 'id' is an automatically generated primary key field
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                # 'user_email' stores the email of the user associated with the ranking
                 ('user_email', models.CharField(max_length=255)),
+                # 'agent_name' stores the name of the agent associated with the ranking
                 ('agent_name', models.CharField(max_length=100)),
+                # 'attribute' stores the attribute that is being ranked
                 ('attribute', models.CharField(max_length=100)),
+                # 'category' stores the category the attribute belongs to
                 ('category', models.CharField(max_length=100)),
+                # 'ranking' stores the actual ranking number
                 ('ranking', models.IntegerField()),
+                # 'created_at' stores the timestamp when the record was created
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
         ),
+
+        # Create the 'GenderSelection' model to store gender selection information
         migrations.CreateModel(
             name='GenderSelection',
             fields=[
+                # 'id' is an automatically generated primary key field
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                # 'agent_name' stores the name of the agent associated with the gender selection
                 ('agent_name', models.CharField(max_length=100)),
+                # 'selected_gender' stores the gender selected by the user
                 ('selected_gender', models.CharField(max_length=50)),
+                # 'user_email' stores the email of the user associated with the gender selection
                 ('user_email', models.CharField(max_length=255)),
+                # 'created_at' stores the timestamp when the record was created
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
         ),
+
+        # Create the 'User' model to store user information
         migrations.CreateModel(
             name='User',
             fields=[
+                # 'id' is an automatically generated primary key field
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                # 'email' stores the user's unique email
                 ('email', models.CharField(max_length=255, unique=True)),
+                # 'gender' stores the gender of the user
                 ('gender', models.CharField(max_length=50)),
+                # 'age' stores the user's age
                 ('age', models.IntegerField()),
+                # 'level_of_study' stores the user's level of education or study
                 ('level_of_study', models.CharField(max_length=100)),
+                # 'affiliation' stores the user's organization or institution
                 ('affiliation', models.CharField(max_length=100)),
+                # 'password' stores the hashed password for the user
                 ('password', models.CharField(max_length=255)),
+                # 'watched_the_videos' stores whether the user has watched certain videos or not
                 ('watched_the_videos', models.BooleanField(default=False)),
+                # 'last_watched_video' stores the name of the last video the user watched, if any
                 ('last_watched_video', models.CharField(max_length=255, null=True)),
             ],
         ),
