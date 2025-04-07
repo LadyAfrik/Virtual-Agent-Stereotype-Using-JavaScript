@@ -36,6 +36,16 @@ const RankingPage = ({ unlockReports }) => {  // Main component for ranking agen
   const [redirectAfterModal, setRedirectAfterModal] = useState(null);  // State to manage redirection after modal
   const navigate = useNavigate();  // Hook for navigation
 
+// Retrieving the user's email from localStorage (if available)
+  const userEmail = localStorage.getItem("userEmail");
+
+// Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!userEmail) {
+      window.location.href = "http://localhost:3000/login";
+    }
+  }, [userEmail]);
+
   // 🔐 On mount: check authentication and initialize data
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -159,7 +169,7 @@ const RankingPage = ({ unlockReports }) => {  // Main component for ranking agen
 
       {/* 🧠 Trait name + category */}
       <h2 className="text-2xl font-bold mb-4">Step 2: Rank Agents on Attributes</h2>
-      <h3 className="text-lg font-semibold">
+      <h3 className="text-lg font-semibold alert">
         Attribute: {randomizedAttributes[currentAttributeIndex]?.name}
       </h3>
       <p className="mb-4 text-gray-600">

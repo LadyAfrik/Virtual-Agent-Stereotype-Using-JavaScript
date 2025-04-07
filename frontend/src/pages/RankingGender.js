@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";  // Import React and necessa
 import { useNavigate } from "react-router-dom";  // Import useNavigate hook for navigation
 import Modal from "../components/Modal";  // Import the Modal component for showing messages
 
+
+
 // 🎥 Agent video sources
 const videoSources = [
   { src: "/videos/Male_Agent.mp4", id: 1 },  // Male agent video source
@@ -21,6 +23,16 @@ const RankingGender = ({ unlockRanking }) => {  // Main component for gender ran
   const [redirectToDashboard, setRedirectToDashboard] = useState(false);  // State to manage redirection after modal
   const navigate = useNavigate();  // Hook for navigation
 
+
+// Retrieving the user's email from localStorage (if available)
+  const userEmail = localStorage.getItem("userEmail");
+
+// Redirect to login if user is not authenticated
+  useEffect(() => {
+    if (!userEmail) {
+      window.location.href = "http://localhost:3000/login";
+    }
+  }, [userEmail]);
 
   // ✅ On mount: check login and shuffle videos
   useEffect(() => {

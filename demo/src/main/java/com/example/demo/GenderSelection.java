@@ -1,27 +1,27 @@
 package com.example.demo;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.*; // Import for JPA annotations
+import java.time.LocalDateTime; // Import for LocalDateTime type to store the creation timestamp
 
-@Entity
-@Table(name = "gender_selections")
+@Entity // Marks the class as a JPA entity, to be mapped to a database table
+@Table(name = "gender_selections") // Specifies the name of the table in the database
 public class GenderSelection {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Marks this field as the primary key of the entity
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatically generates the ID value for new entities
     private Long id;
 
-    @Column(name = "user_email", nullable = false)
+    @Column(name = "user_email", nullable = false) // Specifies the column for user email and ensures it cannot be null
     private String userEmail;
 
-    @Column(name = "agent_name", nullable = false)
+    @Column(name = "agent_name", nullable = false) // Specifies the column for the agent's name and ensures it cannot be null
     private String agentName;
 
-    @Column(name = "selected_gender", nullable = false)
+    @Column(name = "selected_gender", nullable = false) // Specifies the column for the selected gender and ensures it cannot be null
     private String selectedGender;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", updatable = false) // Specifies the creation timestamp column and prevents updating it after the record is created
+    private LocalDateTime createdAt = LocalDateTime.now(); // Sets the creation timestamp to the current time
 
     // Default constructor (required for deserialization)
     public GenderSelection() {}
