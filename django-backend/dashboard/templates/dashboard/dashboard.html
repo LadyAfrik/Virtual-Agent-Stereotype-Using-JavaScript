@@ -7,121 +7,115 @@
     <style>
         /* General Styles */
         html {
-            scroll-behavior: smooth;
+            scroll-behavior: smooth;  /* Enables smooth scrolling on the page */
         }
 
         html, body {
-            height: 100%;
-            margin: 0;
-            overflow: auto;
+            height: 100%;  /* Set height for full page layout */
+            margin: 0;     /* Remove default margin */
+            overflow: auto; /* Enable scroll when content overflows */
         }
 
         /* Dashboard Card Styles */
         .dashboard-card {
-            width: 90%;
-            max-width: 1200px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        .dashboard-charts-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            width: 90%;  /* Set width for dashboard cards */
+            max-width: 1200px;  /* Limit maximum width */
+            padding: 20px;  /* Padding for the card content */
+            border-radius: 10px;  /* Rounded corners */
+            background-color: #ffffff;  /* White background */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Soft shadow for card */
+            display: flex;  /* Flexbox layout */
+            flex-direction: column;  /* Stack content vertically */
+            justify-content: center;  /* Center content */
+            align-items: flex-start;  /* Align content to the start */
         }
 
         /* Hover Effects for Dashboard Card */
         .dashboard-card:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            transform: translateY(-5px);
-            transition: all 0.3s ease-in-out;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);  /* Increase shadow on hover */
+            transform: translateY(-5px);  /* Slightly lift the card */
+            transition: all 0.3s ease-in-out;  /* Smooth transition */
         }
 
         /* Layout for Chart Rows */
         .top-row-charts, .bottom-row-charts {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
+            display: flex;  /* Flexbox layout */
+            justify-content: space-between;  /* Space out the charts */
+            gap: 20px;  /* Add space between charts */
+            flex-wrap: wrap;  /* Allow charts to wrap if screen size is small */
         }
 
         /* Individual Chart Card Styles */
         .chart-card, .left-side-charts, .right-side-charts {
-            flex: 1;
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            min-width: 250px;
+            flex: 1;  /* Allow card to grow */
+            background-color: #fff;  /* White background for each chart */
+            padding: 15px;  /* Padding inside the chart cards */
+            border-radius: 10px;  /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Soft shadow for each chart */
+            min-width: 250px;  /* Minimum width to prevent shrinking too much */
         }
 
         /* Canvas Styles for Charts */
         .chart-card canvas, .left-side-charts canvas, .right-side-charts canvas {
-            width: 100% !important;
-            height: 300px !important;
+            width: 100% !important;  /* Ensure chart takes full width of the container */
+            height: 300px !important;  /* Set a fixed height for the chart */
         }
 
         /* Title Styles */
         .section-title, .chart-title {
-            text-align: center;
-            font-weight: bold;
-            color: #444;
+            text-align: center;  /* Center align titles */
+            font-weight: bold;  /* Bold text */
+            color: #444;  /* Dark grey color for text */
         }
 
         .section-title {
-            font-size: 1.5em;
-            margin-bottom: 20px;
+            font-size: 1.5em;  /* Larger font for section titles */
+            margin-bottom: 20px;  /* Space below section titles */
         }
 
         .chart-title {
-            font-size: 1.2em;
-            margin-bottom: 10px;
+            font-size: 1.2em;  /* Slightly smaller for chart titles */
+            margin-bottom: 10px;  /* Space below chart titles */
         }
 
         /* List Style for Stats Summary */
         .chart-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            font-size: 1.05em;
-            color: #2c3e50;
-            font-weight: 500;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            list-style: none;  /* Remove default list style */
+            padding: 0;  /* Remove padding */
+            margin: 0;  /* Remove margin */
+            font-size: 1.05em;  /* Slightly larger font */
+            color: #2c3e50;  /* Dark color for text */
+            font-weight: 500;  /* Medium weight for text */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  /* Font family */
         }
 
         .chart-card ul li {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background-color: #f2f6fa;
-            padding: 10px 14px;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
+            margin: 10px 0;  /* Space between list items */
+            display: flex;  /* Flexbox layout for items */
+            align-items: center;  /* Vertically center items */
+            gap: 10px;  /* Space between icon and text */
+            background-color: #f2f6fa;  /* Light background color for list items */
+            padding: 10px 14px;  /* Padding for each list item */
+            border-radius: 8px;  /* Rounded corners */
+            transition: background-color 0.3s ease;  /* Smooth background color change */
         }
 
         .chart-card ul li:hover {
-            background-color: #e6eff7;
+            background-color: #e6eff7;  /* Change background color on hover */
         }
 
         .chart-card ul li strong {
-            min-width: 200px;
-            display: inline-block;
-            font-weight: 600;
-            color: #34495e;
+            min-width: 200px;  /* Set minimum width for label */
+            display: inline-block;  /* Ensure the label stays on one line */
+            font-weight: 600;  /* Bold font for labels */
+            color: #34495e;  /* Dark grey color */
         }
 
         .chart-card ul li span {
-            color: #2c3e50;
+            color: #2c3e50;  /* Dark color for the data */
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Import Chart.js library -->
 </head>
 <body>
 
@@ -133,6 +127,7 @@
         <!-- Demographic Summary Card -->
         <div class="chart-card">
             <h3 class="chart-title">User Demographics Summary</h3>
+            <!-- List of demographic statistics -->
             <ul id="summaryStats">
                 <li><strong>👥 Total Users:</strong> <span>{{ total_users }}</span></li>
                 <li><strong>♂️ Male Users (%):</strong> <span>{{ percentage_males }}</span></li>
@@ -147,7 +142,7 @@
         <!-- Last Watched Videos Chart -->
         <div class="chart-card">
             <h3 class="chart-title">Last Watched Videos</h3>
-            <canvas id="videosChart"></canvas>
+            <canvas id="videosChart"></canvas> <!-- Canvas element for chart rendering -->
         </div>
 
         <!-- Watched vs Not Watched and Watched All Videos Charts -->
@@ -155,11 +150,11 @@
             <div style="display: flex; justify-content: space-between; gap: 10px;">
                 <div style="flex: 1; text-align: center;">
                     <h3 class="chart-title">Watched vs Not Watched</h3>
-                    <canvas id="watchedChart"></canvas>
+                    <canvas id="watchedChart"></canvas> <!-- Canvas for Watched vs Not Watched -->
                 </div>
                 <div style="flex: 1; text-align: center;">
                     <h3 class="chart-title">Watched All Videos</h3>
-                    <canvas id="progressChart"></canvas>
+                    <canvas id="progressChart"></canvas> <!-- Canvas for Watched All Videos -->
                 </div>
             </div>
         </div>
@@ -169,19 +164,20 @@
     <div class="bottom-row-charts">
         <div class="left-side-charts">
             <!-- Stacked Bar and Heatmap Charts for Gender Predictions -->
-            <canvas id="genderStackedBarChart"></canvas>
-            <canvas id="genderHeatmap"></canvas>
+            <canvas id="genderStackedBarChart"></canvas> <!-- Canvas for Stacked Bar Chart -->
+            <canvas id="genderHeatmap"></canvas> <!-- Canvas for Heatmap Chart -->
         </div>
 
         <div class="right-side-charts">
             <h2 class="section-title">Attribute Rankings</h2>
+            <!-- Dropdown for selecting an attribute to display in the chart -->
             <label for="attributeDropdown">Select Attribute:</label>
             <select id="attributeDropdown"></select>
 
             <!-- Horizontal Bar Chart for Attribute Rankings -->
             <div id="horizontalChartContainer">
                 <h3 class="chart-title" id="horizontalChartTitle">Horizontal Bar Chart: Attribute Rankings</h3>
-                <canvas id="horizontalBarChart"></canvas>
+                <canvas id="horizontalBarChart"></canvas> <!-- Canvas for Horizontal Bar Chart -->
             </div>
         </div>
     </div>
@@ -197,10 +193,10 @@
         datasets: [{
             label: 'Users',
             data: {{ last_watched_counts|safe }},
-            backgroundColor: ['#2196f3', '#ff9800', '#9c27b0']
+            backgroundColor: ['#2196f3', '#ff9800', '#9c27b0']  // Colors for the bars
         }]
     };
-    new Chart(videosCtx, { type: 'bar', data: videosData });
+    new Chart(videosCtx, { type: 'bar', data: videosData });  // Render the chart
 
     // -------------------------------
     // Percentage of Users Who Watched All Videos Doughnut Chart
@@ -210,11 +206,11 @@
         labels: ['Watched All Videos', 'Remaining'],
         datasets: [{
             label: '% of Users',
-            data: [{{ percentage_watched_all }}, {{ remaining_percentage }}],
-            backgroundColor: ['#4caf50', '#f44336']
+            data: [{{ percentage_watched_all }}, {{ remaining_percentage }}],  // Data for watched vs remaining
+            backgroundColor: ['#4caf50', '#f44336']  // Colors for the doughnut chart
         }]
     };
-    new Chart(progressCtx, { type: 'doughnut', data: progressData });
+    new Chart(progressCtx, { type: 'doughnut', data: progressData });  // Render the chart
 
     // -------------------------------
     // Watched vs Not Watched Pie Chart
@@ -224,10 +220,10 @@
         labels: ['Watched', 'Not Watched'],
         datasets: [{
             data: [{{ watched_vs_not.watched }}, {{ watched_vs_not.not_watched }}],
-            backgroundColor: ['#4caf50', '#f44336']
+            backgroundColor: ['#4caf50', '#f44336']  // Colors for the pie chart
         }]
     };
-    new Chart(watchedCtx, { type: 'pie', data: watchedData });
+    new Chart(watchedCtx, { type: 'pie', data: watchedData });  // Render the chart
 
     // -------------------------------
     // Stacked Bar Chart for Gender Predictions
