@@ -196,21 +196,31 @@ const RankingPage = ({ unlockReports }) => {  // Main component for ranking agen
         ))}
       </div>
 
-      {/* 📩 Submit / Next */}
-      <button
-        onClick={submitRanking}
-        className={`mt-5 px-6 py-3 rounded-lg shadow-md ${
-          loading
-            ? "bg-gray-400 cursor-not-allowed text-white"
-            : "bg-green-500 text-white hover:bg-green-600"
-        }`}
-      >
-        {loading
-          ? "Submitting..."
-          : currentAttributeIndex < randomizedAttributes.length - 1
-          ? "Next Attribute"
-          : "Finish"}
-      </button>
+      {/* 📩 Explanation + Submit side by side */}
+      <div className="mt-5 flex items-center justify-center gap-8">
+        {/* 🟥 Explanation of ranking numbers */}
+        <div className="text-red-600 font-semibold text-left">
+          <p>1 = Most like this trait</p>
+          <p>2 = Moderately like this trait</p>
+          <p>3 = Least like this trait</p>
+        </div>
+
+        {/* ✅ Submit / Next Button */}
+        <button
+          onClick={submitRanking}
+          className={`px-6 py-3 rounded-lg shadow-md ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed text-white"
+              : "bg-green-500 text-white hover:bg-green-600"
+          }`}
+        >
+          {loading
+            ? "Submitting..."
+            : currentAttributeIndex < randomizedAttributes.length - 1
+            ? "Next Attribute"
+            : "Finish"}
+        </button>
+      </div>
     </div>
   );
 };

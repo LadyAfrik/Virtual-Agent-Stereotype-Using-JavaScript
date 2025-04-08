@@ -134,7 +134,10 @@ const RankingGender = ({ unlockRanking }) => {  // Main component for gender ran
         confirmText="OK"
         cancelText=""
       />
-
+    {/* 🟥 Androgynous definition message */}
+    <p className="text-red-600 font-semibold mb-4">
+      Androgynous means having both female and male qualities.
+    </p>
       {/* 🧩 Gender Identification UI */}
       <div className="w-full max-w-4xl text-center">
         <h2 className="text-2xl font-bold mb-4">Identify Agent Genders</h2>
