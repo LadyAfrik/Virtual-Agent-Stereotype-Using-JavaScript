@@ -339,7 +339,7 @@ Contributions are welcome! If you’d like to contribute:
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is not licensed yet.
 
 ---
 
