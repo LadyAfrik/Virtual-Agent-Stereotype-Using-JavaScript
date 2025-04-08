@@ -319,7 +319,7 @@ Do not commit sensitive information (API keys, passwords, etc.) to version contr
 
 
 
-- ** Django Tests:** Execute:
+- **Django Tests:** Execute:
   ```bash
   python manage.py test 
  
