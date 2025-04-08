@@ -1,4 +1,3 @@
-# Virtual-Agent-Stereotype-Using-JavaScript
 # Virtual Agent Stereotype Project
 
 This project is a full‑stack application that integrates a React frontend, a Django backend (serving dashboard and REST APIs), and a Spring Boot backend (handling authentication, survey processing, and business logic). The application enables users to register, log in, watch agent videos, complete a survey (with gender identification and ranking), and view statistical analyses of their responses.
@@ -58,6 +57,7 @@ Key features:
   - JWT-based security
 
 - **Others:**
+  - P5.js to display and run code written in the Processing language within the web environment. 
   - Chart.js for data visualizations
   - Jest and React Testing Library for frontend unit testing
 
